@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Swerve;
 import frc.team_8840_lib.info.console.Logger;
 import frc.team_8840_lib.listeners.EventListener;
 import frc.team_8840_lib.utils.async.Promise;
