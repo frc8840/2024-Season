@@ -1,9 +1,10 @@
 package frc.robot;
 
-import frc.robot.Commands.OperatorControl;
-import frc.robot.Subsystems.Arm;
-import frc.robot.Subsystems.Roller;
-import frc.robot.Subsystems.Swerve;
+import frc.robot.commands.DriverControl;
+import frc.robot.commands.OperatorControl;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
     private static RobotContainer instance;
@@ -21,10 +22,17 @@ public class RobotContainer {
         arm = new Arm();
         swerve = new Swerve();
 
-        OperatorControl operatorControl = new OperatorControl(roller, arm, swerve);
+        OperatorControl operatorControl = new OperatorControl(roller, arm);
+        DriverControl driverControl = new DriverControl(swerve);
 
         roller.setDefaultCommand(
                 operatorControl);
+
+        swerve.setDefaultCommand(
+                driverControl);
     }
 
+    public Swerve getSwerve() {
+        return swerve;
+    }
 }

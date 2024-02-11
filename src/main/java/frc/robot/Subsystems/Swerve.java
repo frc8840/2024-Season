@@ -1,9 +1,7 @@
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team_8840_lib.controllers.SwerveDrive;
-import frc.team_8840_lib.listeners.Robot;
-import frc.team_8840_lib.utils.async.Promise;
 import frc.team_8840_lib.utils.controllers.Pigeon;
 import frc.team_8840_lib.utils.controllers.swerve.ModuleConfig;
 import frc.team_8840_lib.utils.controllers.swerve.SwerveSettings;
@@ -38,18 +36,17 @@ public class Swerve extends SubsystemBase {
         final ModuleConfig backLeft = new ModuleConfig(13, 14, 24, 215.332);
 
         swerveDrive = new SwerveDrive(
-                frontLeft, frontRight, backLeft, backRight,
+                frontLeft,
+                frontRight,
+                backLeft,
+                backRight,
                 new Pigeon(Pigeon.Type.TWO, 42), // pigeon is a gyro (at CAN ID 42)
                 settings // settings from before
         );
 
-        Robot.getRealInstance().waitForFullfillConditions(
-                3000,
-                new Promise((res, rej) -> {
-                    Promise.WaitThen(() -> {
-                        return swerveDrive.isReady();
-                    }, res, rej, 10);
-                }));
+    }
 
+    public SwerveDrive getSwerveDrive() {
+        return swerveDrive;
     }
 }

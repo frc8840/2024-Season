@@ -1,8 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Swerve;
 import frc.team_8840_lib.info.console.Logger;
 import frc.team_8840_lib.listeners.EventListener;
+import frc.team_8840_lib.utils.async.Promise;
 
 public class Robot extends EventListener {
 
@@ -60,6 +62,13 @@ public class Robot extends EventListener {
     public void robotInit() {
         Logger.Log("Hello world!");
         robotContainer = new RobotContainer();
+        frc.team_8840_lib.listeners.Robot.getRealInstance().waitForFullfillConditions(
+                3000,
+                new Promise((res, rej) -> {
+                    Promise.WaitThen(() -> {
+                        return robotContainer.getSwerve().getSwerveDrive().isReady();
+                    }, res, rej, 10);
+                }));
 
     }
 
