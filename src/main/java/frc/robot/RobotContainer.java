@@ -9,7 +9,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     private static RobotContainer instance;
     private Roller roller;
-    private Arm arm;
+    //private Arm arm;
     private Swerve swerve;
 
     public static RobotContainer getInstance() {
@@ -19,10 +19,10 @@ public class RobotContainer {
     public RobotContainer() {
         instance = this;
         roller = new Roller();
-        arm = new Arm();
+        //arm = new Arm();
         swerve = new Swerve();
 
-        OperatorControl operatorControl = new OperatorControl(roller, arm);
+        OperatorControl operatorControl = new OperatorControl(roller);
         DriverControl driverControl = new DriverControl(swerve, roller);
 
         roller.setDefaultCommand(

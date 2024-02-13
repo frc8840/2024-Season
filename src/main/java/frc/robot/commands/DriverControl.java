@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -9,12 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Swerve;
+import frc.team_8840_lib.info.console.Logger;
 import frc.team_8840_lib.listeners.Robot;
 import frc.team_8840_lib.utils.math.units.Unit;
 
 public class DriverControl extends Command {
 
-    private XboxController xboxcontoller;
+    private XboxController xboxcontroller;
     private Swerve swerve;
     private Roller roller;
 
@@ -25,12 +27,12 @@ public class DriverControl extends Command {
         this.swerve = swerve;
         this.roller = roller;
 
-        xboxcontoller = new XboxController(Settings.OPERATOR_CONTROLLER_PORT);
+        xboxcontroller = new XboxController(Settings.OPERATOR_CONTROLLER_PORT);
     }
 
     @Override
     public void execute() {
-
+/* 
         int n = 0;
         for (SwerveModulePosition position : swerve.getSwerveDrive().getSwervePositions()) {
             SmartDashboard.putNumber("Swerve-Mod" + n, position.distanceMeters);
@@ -59,23 +61,27 @@ public class DriverControl extends Command {
 
         // Drive
         swerve.swerveDrive.drive(translation, Rotation2d.fromRadians(xboxcontoller.getRightX()), true, Robot.isReal());
-
+*/
         // THIS IS TEST FOR MOTOR
-        if (xboxcontoller.getAButton()) {
+       
+        if (xboxcontroller.getAButton()) {
             roller.intake();
-        } else if (xboxcontoller.getYButton()) {
+            Logger.Log("xbox A button was pressed");
+        } else 
+        if (xboxcontroller.getYButton()) {
             roller.outtake(true);
+            Logger.Log("xbox Y button was pressed");
         } else {
             roller.stop();
         }
     }
 
     public double getForward() {
-        return -xboxcontoller.getLeftY();
+        return -xboxcontroller.getLeftY();
     }
 
     public double getStrafe() {
-        return xboxcontoller.getLeftX();
+        return xboxcontroller.getLeftX();
     }
 
 }
