@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
+import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Swerve;
 import frc.team_8840_lib.listeners.Robot;
 import frc.team_8840_lib.utils.math.units.Unit;
@@ -15,12 +16,14 @@ public class DriverControl extends Command {
 
     private XboxController xboxcontoller;
     private Swerve swerve;
+    private Roller roller;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public DriverControl(Swerve swerve) {
+    public DriverControl(Swerve swerve, Roller roller) {
         addRequirements(swerve);
 
         this.swerve = swerve;
+        this.roller = roller;
 
         xboxcontoller = new XboxController(Settings.OPERATOR_CONTROLLER_PORT);
     }
@@ -57,6 +60,14 @@ public class DriverControl extends Command {
         // Drive
         swerve.swerveDrive.drive(translation, Rotation2d.fromRadians(xboxcontoller.getRightX()), true, Robot.isReal());
 
+        // THIS IS TEST FOR MOTOR
+        if (xboxcontoller.getAButton()) {
+            roller.intake();
+        } else if (xboxcontoller.getYButton()) {
+            roller.outtake(true);
+        } else {
+            roller.stop();
+        }
     }
 
     public double getForward() {

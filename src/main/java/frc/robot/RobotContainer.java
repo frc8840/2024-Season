@@ -23,7 +23,7 @@ public class RobotContainer {
         swerve = new Swerve();
 
         OperatorControl operatorControl = new OperatorControl(roller, arm);
-        DriverControl driverControl = new DriverControl(swerve);
+        DriverControl driverControl = new DriverControl(swerve, roller);
 
         roller.setDefaultCommand(
                 operatorControl);
