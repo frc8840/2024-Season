@@ -32,58 +32,51 @@ public class DriverControl extends Command {
     @Override
     public void execute() {
 
-        // int n = 0;
-        // for (SwerveModulePosition position :
-        // swerve.getSwerveDrive().getSwervePositions()) {
-        // SmartDashboard.putNumber("Swerve-Mod" + n, position.distanceMeters);
-        // n++;
-        // }
-        // SmartDashboard.updateValues();
+        int n = 0;
+        for (SwerveModulePosition position : swerve.getSwerveDrive().getSwervePositions()) {
+            SmartDashboard.putNumber("Swerve-Mod" + n, position.distanceMeters);
+            n++;
+        }
+        SmartDashboard.updateValues();
 
-        // if (Math.abs(getForward()) < 0.1 && Math.abs(getStrafe()) < 0.1) {
-        // if (Math.abs(xboxcontroller.getRightX()) < 0.1) {
-        // swerve.swerveDrive.stop();
-        // } else {
-        // // If the rotate threshold is met, rotate the robot
-        // swerve.swerveDrive.spin(Rotation2d.fromRadians(xboxcontroller.getRightX()),
-        // Robot.isReal());
-        // }
-        // return;
-        // }
+        // if we left joystick is close to the center
+        if (Math.abs(-xboxcontroller.getLeftY()) < 0.1 && Math.abs(xboxcontroller.getLeftX()) < 0.1) {
+            // if the right joystick is close the center
+            if (Math.abs(xboxcontroller.getRightX()) < 0.1) {
+                swerve.swerveDrive.stop();
+            } else {
+                // If the right joystick threshold is met, rotate the robot
+                swerve.swerveDrive.spin(Rotation2d.fromRadians(xboxcontroller.getRightX()),
+                        Robot.isReal());
+            }
+            return;
+        }
+        // otherwise left joystick is not in the center
 
-        // // Create a new Translation2d with the x and y values of the controller.
-        // Translation2d translation = new Translation2d(
-        // getForward(), // forward from the controller
-        // getStrafe() // strafe from the controller
-        // );
+        // Create a new Translation2d with the desired direction and speed
+        Translation2d translation = new Translation2d(
+                -xboxcontroller.getLeftY(), // forward from the controller
+                xboxcontroller.getLeftX() // strafe from the controller
+        );
 
-        // // Multiply by the max speed.
-        // translation =
-        // translation.times(swerve.swerveDrive.getSettings().maxSpeed.get(Unit.Type.METERS));
+        // Scale by the max speed.
+        translation = translation.times(swerve.swerveDrive.getSettings().maxSpeed.get(Unit.Type.METERS));
 
-        // // Drive
-        // swerve.swerveDrive.drive(translation,
-        // Rotation2d.fromRadians(xboxcontroller.getRightX()), true, Robot.isReal());
+        // Tell the swerve drive to go in that direction
+        swerve.swerveDrive.drive(translation,
+                Rotation2d.fromRadians(xboxcontroller.getRightX()), true, Robot.isReal());
 
         // THIS IS TEST FOR MOTOR
 
-        if (xboxcontroller.getAButton()) {
-            roller.intake();
-            Logger.Log("xbox A button was pressed");
-        } else if (xboxcontroller.getYButton()) {
-            roller.outtake(true);
-            Logger.Log("xbox Y button was pressed");
-        } else {
-            roller.stop();
-        }
-    }
-
-    public double getForward() {
-        return -xboxcontroller.getLeftY();
-    }
-
-    public double getStrafe() {
-        return xboxcontroller.getLeftX();
+        // if (xboxcontroller.getAButton()) {
+        // roller.intake();
+        // Logger.Log("xbox A button was pressed");
+        // } else if (xboxcontroller.getYButton()) {
+        // roller.outtake(true);
+        // Logger.Log("xbox Y button was pressed");
+        // } else {
+        // roller.stop();
+        // }
     }
 
 }
