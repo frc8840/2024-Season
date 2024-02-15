@@ -7,11 +7,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Settings;
 
-public class Roller extends SubsystemBase {
+public class Shooter extends SubsystemBase {
 
     private CANSparkMax rollerMotor;
 
-    public Roller() {
+    public Shooter() {
 
         // Assumption of use of a NEO brushless motor
         rollerMotor = new CANSparkMax(Settings.ROLLER_MOTOR_ID, MotorType.kBrushless);

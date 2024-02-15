@@ -5,15 +5,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Arm.ArmPosition;
 
 public class OperatorControl extends Command {
 
     private PS4Controller ps4controller;
 
-    private Roller roller;
-    //private Arm arm;
+    private Shooter roller;
+    // private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
             ArmPosition.HIGH_CONE };
@@ -22,10 +22,10 @@ public class OperatorControl extends Command {
     private boolean armInPosition = false;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Roller roller) {
+    public OperatorControl(Shooter roller) {
         addRequirements(roller);
         this.roller = roller;
-        //this.arm = arm;
+        // this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
 
@@ -53,23 +53,25 @@ public class OperatorControl extends Command {
             }
         }
 
-        /*if (ps4controller.getCircleButtonReleased()) {
-            armInPosition = !armInPosition;
-
-            if (armInPosition) {
-                arm.setArmPosition(heightOrder[selectedPosition]);
-            } else {
-                arm.setArmPosition(ArmPosition.REST);
-            }
-        } else if (ps4controller.getCrossButtonReleased() && !armInPosition) {
-            arm.setArmPosition(ArmPosition.DOUBLE_SUBSTATION_INTAKE);
-
-            armInPosition = true;
-        }
-
-        arm.reportToNetworkTables();
-
-        SmartDashboard.putString("Selected Position", heightOrder[selectedPosition].name());
-*/
+        /*
+         * if (ps4controller.getCircleButtonReleased()) {
+         * armInPosition = !armInPosition;
+         * 
+         * if (armInPosition) {
+         * arm.setArmPosition(heightOrder[selectedPosition]);
+         * } else {
+         * arm.setArmPosition(ArmPosition.REST);
+         * }
+         * } else if (ps4controller.getCrossButtonReleased() && !armInPosition) {
+         * arm.setArmPosition(ArmPosition.DOUBLE_SUBSTATION_INTAKE);
+         * 
+         * armInPosition = true;
+         * }
+         * 
+         * arm.reportToNetworkTables();
+         * 
+         * SmartDashboard.putString("Selected Position",
+         * heightOrder[selectedPosition].name());
+         */
     }
 }

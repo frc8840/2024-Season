@@ -2,14 +2,12 @@ package frc.robot;
 
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
     private static RobotContainer instance;
-    private Roller roller;
-    //private Arm arm;
+    private Shooter shooter;
     private Swerve swerve;
 
     public static RobotContainer getInstance() {
@@ -18,14 +16,13 @@ public class RobotContainer {
 
     public RobotContainer() {
         instance = this;
-        roller = new Roller();
-        //arm = new Arm();
+        shooter = new Shooter();
         swerve = new Swerve();
 
-        OperatorControl operatorControl = new OperatorControl(roller);
-        DriverControl driverControl = new DriverControl(swerve, roller);
+        OperatorControl operatorControl = new OperatorControl(shooter);
+        DriverControl driverControl = new DriverControl(swerve, shooter);
 
-        roller.setDefaultCommand(
+        shooter.setDefaultCommand(
                 operatorControl);
 
         swerve.setDefaultCommand(

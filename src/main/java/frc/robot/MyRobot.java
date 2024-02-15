@@ -5,7 +5,7 @@ import frc.team_8840_lib.info.console.Logger;
 import frc.team_8840_lib.listeners.EventListener;
 import frc.team_8840_lib.utils.async.Promise;
 
-public class Robot extends EventListener {
+public class MyRobot extends EventListener {
 
     private RobotContainer robotContainer;
 
