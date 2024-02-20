@@ -9,48 +9,48 @@ import frc.robot.Settings;
 
 public class Shooter extends SubsystemBase {
 
-    private CANSparkMax rollerMotor;
+    private CANSparkMax motor;
 
     public Shooter() {
 
         // Assumption of use of a NEO brushless motor
-        rollerMotor = new CANSparkMax(Settings.ROLLER_MOTOR_ID, MotorType.kBrushless);
+        motor = new CANSparkMax(Settings.ROLLER_MOTOR_ID, MotorType.kBrushless);
 
         // Restore factory defaults
-        rollerMotor.restoreFactoryDefaults();
+        motor.restoreFactoryDefaults();
 
         // Set the current limits
-        rollerMotor.setSmartCurrentLimit(25);
-        rollerMotor.setSecondaryCurrentLimit(30);
+        motor.setSmartCurrentLimit(25);
+        motor.setSecondaryCurrentLimit(30);
 
         // Set the ramp rate since it jumps to full speed too quickly - don't want to
         // break the robot!
-        rollerMotor.setOpenLoopRampRate(0.2);
+        motor.setOpenLoopRampRate(0.2);
 
         // Set the idle mode to brake
-        rollerMotor.setIdleMode(IdleMode.kBrake);
+        motor.setIdleMode(IdleMode.kBrake);
 
         // Set the CAN timeout to 20ms
-        rollerMotor.setCANTimeout(20);
+        motor.setCANTimeout(20);
 
         // Update the settings
-        rollerMotor.burnFlash();
+        motor.burnFlash();
     }
 
     public void intake() {
-        rollerMotor.set(Settings.INTAKE_SPEED);
+        motor.set(Settings.INTAKE_SPEED);
     }
 
     public void outtake(boolean fast) {
         if (fast) {
-            rollerMotor.set(Settings.FAST_OUTTAKE_SPEED);
+            motor.set(Settings.FAST_OUTTAKE_SPEED);
         } else {
-            rollerMotor.set(Settings.SLOW_OUTTAKE_SPEED);
+            motor.set(Settings.SLOW_OUTTAKE_SPEED);
         }
     }
 
     public void stop() {
-        rollerMotor.set(0);
+        motor.set(0);
     }
 
 }

@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-import frc.team_8840_lib.info.console.Logger;
 import frc.team_8840_lib.listeners.Robot;
 import frc.team_8840_lib.utils.math.units.Unit;
 
@@ -17,14 +16,12 @@ public class DriverControl extends Command {
 
     private XboxController xboxcontroller;
     private Swerve swerve;
-    private Shooter roller;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public DriverControl(Swerve swerve, Shooter roller) {
+    public DriverControl(Swerve swerve) {
         addRequirements(swerve);
 
         this.swerve = swerve;
-        this.roller = roller;
 
         xboxcontroller = new XboxController(Settings.OPERATOR_CONTROLLER_PORT);
     }

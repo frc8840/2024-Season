@@ -16,17 +16,15 @@ public class RobotContainer {
 
     public RobotContainer() {
         instance = this;
-        shooter = new Shooter();
+        // shooter = new Shooter();
         swerve = new Swerve();
 
-        OperatorControl operatorControl = new OperatorControl(shooter);
-        DriverControl driverControl = new DriverControl(swerve, shooter);
+        // OperatorControl operatorControl = new OperatorControl(shooter);
+        DriverControl driverControl = new DriverControl(swerve);
 
-        shooter.setDefaultCommand(
-                operatorControl);
+        // shooter.setDefaultCommand(operatorControl);
 
-        swerve.setDefaultCommand(
-                driverControl);
+        swerve.setDefaultCommand(driverControl);
     }
 
     public Swerve getSwerve() {
