@@ -15,8 +15,8 @@ public class Swerve extends SubsystemBase {
         SwerveSettings settings = new SwerveSettings();
 
         settings.maxSpeed = new Unit(4.5, Unit.Type.FEET);
-        settings.trackWidth = new Unit(18.75, Unit.Type.INCHES);
-        settings.wheelBase = new Unit(18.75, Unit.Type.INCHES);
+        settings.trackWidth = new Unit(22.75, Unit.Type.INCHES);
+        settings.wheelBase = new Unit(24.75, Unit.Type.INCHES);
 
         settings.invertGyro = true;
         settings.canCoderInverted = true;
@@ -30,10 +30,10 @@ public class Swerve extends SubsystemBase {
         settings.threshold = 0.01;
         settings.useThresholdAsPercentage = true;
 
-        final ModuleConfig frontLeft = new ModuleConfig(12, 11, 21, 125.8203); // was 105.8203
-        final ModuleConfig frontRight = new ModuleConfig(14, 13, 22, 323.877);
-        final ModuleConfig backRight = new ModuleConfig(16, 15, 23, 41.8359);
-        final ModuleConfig backLeft = new ModuleConfig(18, 17, 24, 205.332); // was 215.332
+        final ModuleConfig frontLeft = new ModuleConfig(12, 11, 21, 180.0); //was 105.8203
+        final ModuleConfig frontRight = new ModuleConfig(14, 13, 22, 225.0); // 323.877
+        final ModuleConfig backRight = new ModuleConfig(16, 15, 23, -45.0); // 41.8359
+        final ModuleConfig backLeft = new ModuleConfig(18, 17, 24, -100.0);  // was 215.332
         // odd numbers are for rotation, even for power
 
         swerveDrive = new SwerveDrive(

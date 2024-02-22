@@ -7,8 +7,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
+import frc.robot.controllers.SwerveModule;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.team_8840_lib.info.console.Logger;
 import frc.team_8840_lib.listeners.Robot;
 import frc.team_8840_lib.utils.math.units.Unit;
 
@@ -28,6 +30,17 @@ public class DriverControl extends Command {
 
     @Override
     public void execute() {
+
+        // If user pressed the 'A' key, then we print the CANCoder angles
+                //Printing CANcoder angles every 10th
+        if (xboxcontroller.getAButtonPressed()) {
+            SwerveModule[] modules = swerve.getSwerveDrive().getModules();
+            Logger.Log("Angles (new):");
+            Logger.Log("front left: " + modules[2].getAbsoluteAngle());
+            Logger.Log("front right: " + modules[0].getAbsoluteAngle());
+            Logger.Log("back right: " + modules[1].getAbsoluteAngle());
+            Logger.Log("back left: " + modules[3].getAbsoluteAngle());
+        }
 
         int n = 0;
         for (SwerveModulePosition position : swerve.getSwerveDrive().getSwervePositions()) {
@@ -63,17 +76,8 @@ public class DriverControl extends Command {
         swerve.swerveDrive.drive(translation,
                 Rotation2d.fromRadians(xboxcontroller.getRightX()), true, Robot.isReal());
 
-        // THIS IS TEST FOR MOTOR
+        
 
-        // if (xboxcontroller.getAButton()) {
-        // roller.intake();
-        // Logger.Log("xbox A button was pressed");
-        // } else if (xboxcontroller.getYButton()) {
-        // roller.outtake(true);
-        // Logger.Log("xbox Y button was pressed");
-        // } else {
-        // roller.stop();
-        // }
     }
 
 }

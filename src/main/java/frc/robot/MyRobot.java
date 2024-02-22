@@ -76,15 +76,6 @@ public class MyRobot extends EventListener {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        //Printing CANcoder angles
-        if (robotContainer!=null) {
-        SwerveModule[] modules = robotContainer.getSwerve().getSwerveDrive().getModules();
-        Logger.Log("Angles:");
-        Logger.Log("front left: " + modules[2].getAbsoluteAngle());
-        Logger.Log("front right: " + modules[0].getAbsoluteAngle());
-        Logger.Log("back right: " + modules[1].getAbsoluteAngle());
-        Logger.Log("back left: " + modules[3].getAbsoluteAngle());
-        }
     }
 
 }
