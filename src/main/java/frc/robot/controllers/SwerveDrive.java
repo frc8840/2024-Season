@@ -65,6 +65,7 @@ public class SwerveDrive extends Replayable {
     }
 
     public void drive(Translation2d translation, Rotation2d rotationSpeed, boolean fieldRelative, boolean openLoop) {
+        Logger.Log("drive starting");
         ChassisSpeeds chassisSpeeds = fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(),
                         rotationSpeed.getRadians(), this.getAngle())
@@ -82,6 +83,7 @@ public class SwerveDrive extends Replayable {
     }
 
     public void spin(Rotation2d rotationPerSecond, boolean openLoop) {
+        Logger.Log("spin starting");
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, rotationPerSecond.getRadians());
         SwerveModuleState[] states = this.m_settings.getKinematics().toSwerveModuleStates(chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, this.m_settings.maxSpeed.get(Type.METERS));

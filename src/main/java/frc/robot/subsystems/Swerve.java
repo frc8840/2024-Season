@@ -15,8 +15,8 @@ public class Swerve extends SubsystemBase {
         SwerveSettings settings = new SwerveSettings();
 
         settings.maxSpeed = new Unit(4.5, Unit.Type.FEET);
-        settings.trackWidth = new Unit(22.75, Unit.Type.INCHES);
-        settings.wheelBase = new Unit(24.75, Unit.Type.INCHES);
+        settings.trackWidth = new Unit(24, Unit.Type.INCHES);
+        settings.wheelBase = new Unit(24, Unit.Type.INCHES);
 
         settings.invertGyro = true;
         settings.canCoderInverted = true;

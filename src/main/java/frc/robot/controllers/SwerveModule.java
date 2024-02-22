@@ -252,6 +252,7 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState state, boolean openLoop, boolean runOptimization) {
         SwerveModuleState optimizedState = runOptimization ? CTREModuleState.optimize(state, this.m_lastDesiredAngle)
                 : state;
+        Logger.Log(m_position + " setDesiredState to: " + optimizedState.angle + " was: " + m_lastDesiredAngle);
         this.setSpeed(new Unit(optimizedState.speedMetersPerSecond, Type.METERS), openLoop, runOptimization);
         this.setAngle(optimizedState.angle, runOptimization);
         this.m_lastDesiredAngle = optimizedState.angle;
