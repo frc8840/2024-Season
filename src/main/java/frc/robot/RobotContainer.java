@@ -2,13 +2,14 @@ package frc.robot;
 
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
+import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
     private static RobotContainer instance;
     private Shooter shooter;
-    private Swerve swerve;
+    private NewSwerve swerve;
 
     public static RobotContainer getInstance() {
         return instance;
@@ -17,7 +18,7 @@ public class RobotContainer {
     public RobotContainer() {
         instance = this;
         // shooter = new Shooter();
-        swerve = new Swerve();
+        swerve = new NewSwerve();
 
         // OperatorControl operatorControl = new OperatorControl(shooter);
         DriverControl driverControl = new DriverControl(swerve);
@@ -27,7 +28,7 @@ public class RobotContainer {
         swerve.setDefaultCommand(driverControl);
     }
 
-    public Swerve getSwerve() {
-        return swerve;
-    }
+    // public Swerve getSwerve() {
+    // return swerve;
+    // }
 }
