@@ -153,7 +153,7 @@ public class SwerveModule {
                 return waitFor.resolved();
             }, res, rej, 10);
         })).finish((res, rej) -> {
-            Logger.Log(this.m_position.name() + " Swerve Module", "Configured motors!");
+            Logger.Log(this.toString(), "Configured motors!");
             this.m_driveEncoderWrapper.getEncoder().setPosition(0.0);
             this.setNeoCANStatusFrames(this.m_driveMotor, 10, 20, 500, 500, 500);
             this.setNeoCANStatusFrames(this.m_turnMotor, 10, 500, 20, 500, 500);
@@ -167,7 +167,10 @@ public class SwerveModule {
     }
 
     public Promise resetToAbsolute() {
-        this.m_turnEncoderWrapper.getEncoder().setPosition(0.0);
+        // this.m_turnEncoderWrapper.getEncoder().setPosition(0.0);
+        double newPosition = this.getAbsoluteAngle().getDegrees() - this.m_config.getTurnOffset();
+        Logger.Log(this.toString(), "Resetting to newPosition=" + newPosition + " from angle="
+                + this.getAbsoluteAngle().getDegrees() + " and offset=" + this.m_config.getTurnOffset());
         return (new Promise((res, rej) -> {
             if (Robot.isSimulation()) {
                 this.m_turnEncoderWrapper.setManualOffset(true);
@@ -177,14 +180,13 @@ public class SwerveModule {
                 rej.onError(new Exception("Skipped to wrapper setup because manual offset is enabled!"));
             } else {
                 int start = (int) System.currentTimeMillis();
-                double newPosition = this.getAbsoluteAngle().getDegrees() - this.m_config.getTurnOffset();
                 this.m_turnEncoderWrapper.setPosition(newPosition);
                 Promise.WaitThen(() -> {
                     if (Robot.isSimulation()) {
                         return true;
                     } else if ((long) (start + 1000) < System.currentTimeMillis()) {
-                        Logger.Log(this.m_position.name() + " Swerve Module", "Failed to reset to absolute!");
-                        throw new RuntimeException("Failed to reset to absolute!");
+                        Logger.Log(this.toString(), "Failed to reset to absolute!");
+                        throw new RuntimeException(this.toString() + ": Failed to reset to absolute!");
                     } else {
                         return Math.abs(this.m_turnEncoderWrapper.getEncoder().getPosition() - newPosition) < 0.1
                                 || Robot.isSimulation();
@@ -192,15 +194,16 @@ public class SwerveModule {
                 }, res, rej, 10);
             }
         })).then((res, rej) -> {
-            Logger.Log(this.m_position.name() + " Swerve Module", "Successfully reset to absolute through REV API! "
+            Logger.Log(this.toString(), "Successfully reset to absolute through REV API! "
                     + (Robot.isSimulation() ? "(Process fast due to simulation.)" : ""));
             res.run();
         }).catch_err((e) -> {
-            this.m_turnEncoderWrapper.doSubtractionOfStart(true);
-            double newPosition = this.getAbsoluteAngle().getDegrees() - this.m_config.getTurnOffset();
-            this.m_turnEncoderWrapper.setManualOffset(true);
-            this.m_turnEncoderWrapper.setPosition(newPosition);
-            Logger.Log(this.m_position.name() + " Swerve Module",
+            // this.m_turnEncoderWrapper.doSubtractionOfStart(true);
+            // double newPosition = this.getAbsoluteAngle().getDegrees() -
+            // this.m_config.getTurnOffset();
+            // this.m_turnEncoderWrapper.setManualOffset(true);
+            // this.m_turnEncoderWrapper.setPosition(newPosition);
+            Logger.Log(this.toString(),
                     "Was unable to reset to absolute through REV API, using fallback method! (Confirmation: "
                             + this.m_turnEncoderWrapper.getPosition() + " should be equal to 0!)");
         });
@@ -289,5 +292,9 @@ public class SwerveModule {
 
     public boolean initalized() {
         return this.m_isInitialized;
+    }
+
+    public String toString() {
+        return "SwerveModule:" + this.m_position.name();
     }
 }
