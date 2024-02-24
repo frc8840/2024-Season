@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
@@ -12,7 +11,7 @@ public class OperatorControl extends Command {
 
     private PS4Controller ps4controller;
 
-    private Shooter roller;
+    private Shooter shooter;
     // private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
@@ -22,9 +21,9 @@ public class OperatorControl extends Command {
     private boolean armInPosition = false;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Shooter roller) {
-        addRequirements(roller);
-        this.roller = roller;
+    public OperatorControl(Shooter shooter) {
+        addRequirements(shooter);
+        this.shooter = shooter;
         // this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
@@ -34,11 +33,11 @@ public class OperatorControl extends Command {
     @Override
     public void execute() {
         if (ps4controller.getL2Button()) {
-            roller.intake();
+            shooter.intake();
         } else if (ps4controller.getR2Button() || ps4controller.getR1Button()) {
-            roller.outtake(ps4controller.getR2Button());
+            shooter.outtake(ps4controller.getR2Button());
         } else {
-            roller.stop();
+            shooter.stop();
         }
 
         if (ps4controller.getPOV() == 270) {
