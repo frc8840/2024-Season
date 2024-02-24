@@ -64,6 +64,7 @@ public class MyRobot extends EventListener {
     @Override
     public void robotInit() {
         Logger.Log("Hello world!");
+        ctreConfigs = new CTREConfigs();
         robotContainer = new RobotContainer();
     }
 

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.team_8840_lib.info.console.Logger;
 
 public class NewSwerve extends SubsystemBase {
     private final Pigeon2 gyro;
@@ -45,6 +46,7 @@ public class NewSwerve extends SubsystemBase {
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
+        Logger.Log("mSwerveMods.length=" + mSwerveMods.length);
     }
 
     public void drive(
@@ -83,9 +85,13 @@ public class NewSwerve extends SubsystemBase {
     }
 
     public SwerveModulePosition[] getStates() {
+        if (mSwerveMods == null || mSwerveMods.length != 4) {
+            Logger.Log("mSwerveMods = null");
+            return null;
+        }
         SwerveModulePosition[] states = new SwerveModulePosition[4];
-        for (NewSwerveModule mod : mSwerveMods) {
-            states[mod.moduleNumber] = mod.getState();
+        for (int i = 0; i < mSwerveMods.length; i++) {
+            states[i] = mSwerveMods[i].getState();
         }
         return states;
     }
@@ -109,7 +115,8 @@ public class NewSwerve extends SubsystemBase {
             SmartDashboard.putNumber(
                     "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber(
-                    "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+                    "Mod " + mod.moduleNumber + " Integrated",
+                    mod.getState().angle.getDegrees());
             SmartDashboard.putNumber(
                     "Mod " + mod.moduleNumber + " Velocity", mod.getState().distanceMeters);
         }

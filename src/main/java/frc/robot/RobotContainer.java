@@ -5,6 +5,7 @@ import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.team_8840_lib.info.console.Logger;
 
 public class RobotContainer {
     private static RobotContainer instance;
@@ -18,13 +19,12 @@ public class RobotContainer {
     public RobotContainer() {
         instance = this;
         // shooter = new Shooter();
-        swerve = new NewSwerve();
-
         // OperatorControl operatorControl = new OperatorControl(shooter);
-        DriverControl driverControl = new DriverControl(swerve);
-
         // shooter.setDefaultCommand(operatorControl);
 
+        swerve = new NewSwerve();
+        Logger.Log("finished making NewSwerve with " + swerve.getStates());
+        DriverControl driverControl = new DriverControl(swerve);
         swerve.setDefaultCommand(driverControl);
     }
 
