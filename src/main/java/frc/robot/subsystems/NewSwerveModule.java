@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -11,12 +11,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.config.SwerveModuleConstants;
 import frc.lib.math.OnboardModuleState;
-import frc.lib.util.CANCoderUtil;
-import frc.lib.util.CANCoderUtil.CCUsage;
 import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.team_8840_lib.info.console.Logger;
 
 public class NewSwerveModule {
     public int moduleNumber;
@@ -28,7 +27,7 @@ public class NewSwerveModule {
 
     private RelativeEncoder driveEncoder;
     private RelativeEncoder integratedAngleEncoder;
-    private CANCoder angleEncoder;
+    private CANcoder angleEncoder;
 
     private final SparkMaxPIDController driveController;
     private final SparkMaxPIDController angleController;
@@ -41,7 +40,7 @@ public class NewSwerveModule {
         angleOffset = moduleConstants.angleOffset;
 
         /* Angle Encoder Config */
-        angleEncoder = new CANCoder(moduleConstants.cancoderID);
+        angleEncoder = new CANcoder(moduleConstants.cancoderID);
         configAngleEncoder();
 
         /* Angle Motor Config */
@@ -70,14 +69,16 @@ public class NewSwerveModule {
     }
 
     private void resetToAbsolute() {
-        double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
+        double canAngleDegrees = getCanCoderAngle().getDegrees();
+        Logger.Log("raw canAngleDegrees for " + angleEncoder.getDeviceID() + ": " + canAngleDegrees);
+        double absolutePosition = canAngleDegrees - angleOffset.getDegrees();
+        Logger.Log("fixed canAngleDegrees for " + angleEncoder.getDeviceID() + ": " + absolutePosition);
         integratedAngleEncoder.setPosition(absolutePosition);
     }
 
     private void configAngleEncoder() {
-        angleEncoder.configFactoryDefault();
-        CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
-        angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
+        // CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
+        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.config);
     }
 
     private void configAngleMotor() {
@@ -140,11 +141,15 @@ public class NewSwerveModule {
         return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
     }
 
-    public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+    public Rotation2d getCanCoderAngle() {
+        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValueAsDouble());
     }
 
-    public SwerveModulePosition getState() {
-        return new SwerveModulePosition(driveEncoder.getVelocity(), getAngle());
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(driveEncoder.getVelocity(), getAngle());
+    }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     }
 }

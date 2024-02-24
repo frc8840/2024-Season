@@ -86,16 +86,16 @@ public class NewSwerve extends SubsystemBase {
         return mSwerveMods;
     }
 
-    public SwerveModulePosition[] getStates() {
+    public SwerveModulePosition[] getPositions() {
         if (mSwerveMods == null || mSwerveMods.length != 4) {
             Logger.Log("mSwerveMods = null");
             return null;
         }
-        SwerveModulePosition[] states = new SwerveModulePosition[4];
+        SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (int i = 0; i < mSwerveMods.length; i++) {
-            states[i] = mSwerveMods[i].getState();
+            positions[i] = mSwerveMods[i].getPosition();
         }
-        return states;
+        return positions;
     }
 
     public void zeroGyro() {
@@ -110,17 +110,17 @@ public class NewSwerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveOdometry.update(getYaw(), getStates());
+        swerveOdometry.update(getYaw(), getPositions());
         field.setRobotPose(getPose());
 
         for (NewSwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber(
-                    "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+                    "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoderAngle().getDegrees());
             SmartDashboard.putNumber(
                     "Mod " + mod.moduleNumber + " Integrated",
                     mod.getState().angle.getDegrees());
             SmartDashboard.putNumber(
-                    "Mod " + mod.moduleNumber + " Velocity", mod.getState().distanceMeters);
+                    "Mod " + mod.moduleNumber + " Velocity", mod.getPosition().distanceMeters);
         }
     }
 }

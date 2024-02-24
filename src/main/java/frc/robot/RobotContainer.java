@@ -18,12 +18,12 @@ public class RobotContainer {
 
     public RobotContainer() {
         instance = this;
-        shooter = new Shooter();
-        OperatorControl operatorControl = new OperatorControl(shooter);
-        shooter.setDefaultCommand(operatorControl);
+        // shooter = new Shooter();
+        // OperatorControl operatorControl = new OperatorControl(shooter);
+        // shooter.setDefaultCommand(operatorControl);
 
         swerve = new NewSwerve();
-        Logger.Log("finished making NewSwerve with " + swerve.getStates());
+        Logger.Log("finished making NewSwerve with " + swerve.getPositions());
         DriverControl driverControl = new DriverControl(swerve);
         swerve.setDefaultCommand(driverControl);
     }

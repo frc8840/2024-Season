@@ -36,25 +36,34 @@ public class DriverControl extends Command {
         // If user pressed the 'A' key, then we print the CANCoder angles
         if (xboxcontroller.getAButtonPressed()) {
             NewSwerveModule[] modules = swerve.getModules();
-            SwerveModulePosition[] positions = swerve.getStates();
+            SwerveModulePosition[] positions = swerve.getPositions();
             Logger.Log("CAN Angles:");
             for (int i = 0; i < 4; i++) {
-                Logger.Log(modules[i].toString() + ": " + modules[i].getCanCoder().getDegrees());
+                Logger.Log(modules[i].toString() + ": " + modules[i].getCanCoderAngle().getDegrees());
             }
         }
         // If user pressed the 'B' key, then we print the motor encoder angles
         if (xboxcontroller.getBButtonPressed()) {
             NewSwerveModule[] modules = swerve.getModules();
-            SwerveModulePosition[] positions = swerve.getStates();
+            SwerveModulePosition[] positions = swerve.getPositions();
             Logger.Log("Motor Angles:");
             for (int i = 0; i < 4; i++) {
                 Logger.Log(modules[i].toString() + ": " + positions[i].angle);
             }
         }
+        // If user pressed the 'X' key, then we print the motor encoder angles
+        if (xboxcontroller.getXButtonPressed()) {
+            Logger.Log("Drive straight:");
+            swerve.drive(
+                    new Translation2d(0.0, 1.0),
+                    0,
+                    false,
+                    true);
+        }
 
         /* Get Values, Deadband */
         double translationVal = translationLimiter.calculate(
-                MathUtil.applyDeadband(xboxcontroller.getRightX(), Constants.Swerve.stickDeadband));
+                MathUtil.applyDeadband(xboxcontroller.getRightY(), Constants.Swerve.stickDeadband));
         double strafeVal = strafeLimiter.calculate(
                 MathUtil.applyDeadband(xboxcontroller.getRightX(), Constants.Swerve.stickDeadband));
         double rotationVal = rotationLimiter.calculate(
@@ -64,7 +73,7 @@ public class DriverControl extends Command {
         swerve.drive(
                 new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
                 rotationVal * Constants.Swerve.maxAngularVelocity,
-                xboxcontroller.getAButton(),
+                false,
                 true);
 
     }
