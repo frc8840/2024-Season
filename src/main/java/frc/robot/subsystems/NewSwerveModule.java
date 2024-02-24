@@ -16,7 +16,7 @@ import frc.lib.util.CANCoderUtil.CCUsage;
 import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
-import frc.robot.MyRobot;
+import frc.robot.Robot;
 
 public class NewSwerveModule {
     public int moduleNumber;
@@ -77,7 +77,7 @@ public class NewSwerveModule {
     private void configAngleEncoder() {
         angleEncoder.configFactoryDefault();
         CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
-        angleEncoder.configAllSettings(MyRobot.ctreConfigs.swerveCanCoderConfig);
+        angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
     }
 
     private void configAngleMotor() {

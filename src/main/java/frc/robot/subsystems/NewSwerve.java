@@ -37,6 +37,7 @@ public class NewSwerve extends SubsystemBase {
         };
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), startPositions);
 
+        // TODO: describe the order of the modules here
         mSwerveMods = new NewSwerveModule[] {
                 new NewSwerveModule(0, Constants.Swerve.Mod0.constants),
                 new NewSwerveModule(1, Constants.Swerve.Mod1.constants),
@@ -49,6 +50,7 @@ public class NewSwerve extends SubsystemBase {
         Logger.Log("mSwerveMods.length=" + mSwerveMods.length);
     }
 
+    // translation and rotation are the desired behavior of the robot at this moment
     public void drive(
             Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
