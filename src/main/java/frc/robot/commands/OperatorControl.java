@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Shooter;
+import frc.team_8840_lib.info.console.Logger;
 import frc.robot.subsystems.Arm.ArmPosition;
 
 public class OperatorControl extends Command {
@@ -32,6 +33,14 @@ public class OperatorControl extends Command {
 
     @Override
     public void execute() {
+
+        if (ps4controller.getL2ButtonPressed()) {
+            Logger.Log("L2 Pressed");
+        }
+        if (ps4controller.getR2ButtonPressed()) {
+            Logger.Log("R2 Pressed");
+        }
+
         if (ps4controller.getL2Button()) {
             shooter.intake();
         } else if (ps4controller.getR2Button() || ps4controller.getR1Button()) {
