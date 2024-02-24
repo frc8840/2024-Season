@@ -37,16 +37,16 @@ public class DriverControl extends Command {
         if (xboxcontroller.getAButtonPressed()) {
             NewSwerveModule[] modules = swerve.getModules();
             SwerveModulePosition[] positions = swerve.getStates();
-            Logger.Log("Angles (new):");
+            Logger.Log("CAN Angles:");
             for (int i = 0; i < 4; i++) {
                 Logger.Log(modules[i].toString() + ": " + modules[i].getCanCoder().getDegrees());
             }
         }
         // If user pressed the 'B' key, then we print the motor encoder angles
-        if (xboxcontroller.getAButtonPressed()) {
+        if (xboxcontroller.getBButtonPressed()) {
             NewSwerveModule[] modules = swerve.getModules();
             SwerveModulePosition[] positions = swerve.getStates();
-            Logger.Log("Angles (new):");
+            Logger.Log("Motor Angles:");
             for (int i = 0; i < 4; i++) {
                 Logger.Log(modules[i].toString() + ": " + positions[i].angle);
             }
