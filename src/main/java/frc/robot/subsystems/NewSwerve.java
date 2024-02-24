@@ -62,6 +62,9 @@ public class NewSwerve extends SubsystemBase {
 
         for (NewSwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+            if (translation.getX() != 0.0 || translation.getY() != 0.0 || rotation != 0.0) {
+                Logger.Log("desired state for " + mod.moduleNumber + ": " + swerveModuleStates[mod.moduleNumber]);
+            }
         }
     }
 
