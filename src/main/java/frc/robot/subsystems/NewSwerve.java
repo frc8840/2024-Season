@@ -58,22 +58,15 @@ public class NewSwerve extends SubsystemBase {
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                 translation.getX(), translation.getY(), rotation, getYaw())
                         : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
-
-        for (NewSwerveModule mod : mSwerveMods) {
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-            if (translation.getX() != 0.0 || translation.getY() != 0.0 || rotation != 0.0) {
-                Logger.Log("desired state for " + mod.moduleNumber + ": " + swerveModuleStates[mod.moduleNumber]);
-            }
-        }
+        setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
     /* Used by SwerveControllerCommand in Auto */
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
+    public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
 
         for (NewSwerveModule mod : mSwerveMods) {
-            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+            mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);
         }
     }
 

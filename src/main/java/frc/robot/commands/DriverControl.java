@@ -2,8 +2,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -51,30 +53,32 @@ public class DriverControl extends Command {
                 Logger.Log(modules[i].toString() + ": " + positions[i].angle);
             }
         }
-        // If user pressed the 'X' key, then we print the motor encoder angles
-        if (xboxcontroller.getXButtonPressed()) {
+        // If user pressed the 'X' key, then we run the motors straight
+        if (xboxcontroller.getXButton()) {
             Logger.Log("Drive straight:");
+            swerve.setModuleStates(new SwerveModuleState[] {
+                    new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+                    new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+                    new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+                    new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+            }, false);
+        } else {
+
+            /* Get Values, Deadband */
+            double translationVal = translationLimiter.calculate(
+                    MathUtil.applyDeadband(xboxcontroller.getRightY(), Constants.Swerve.stickDeadband));
+            double strafeVal = strafeLimiter.calculate(
+                    MathUtil.applyDeadband(xboxcontroller.getRightX(), Constants.Swerve.stickDeadband));
+            double rotationVal = rotationLimiter.calculate(
+                    MathUtil.applyDeadband(xboxcontroller.getLeftX(), Constants.Swerve.stickDeadband));
+
+            /* Drive */
             swerve.drive(
-                    new Translation2d(0.0, 1.0),
-                    0,
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+                    rotationVal * Constants.Swerve.maxAngularVelocity,
                     false,
-                    true);
+                    false);
         }
-
-        /* Get Values, Deadband */
-        double translationVal = translationLimiter.calculate(
-                MathUtil.applyDeadband(xboxcontroller.getRightY(), Constants.Swerve.stickDeadband));
-        double strafeVal = strafeLimiter.calculate(
-                MathUtil.applyDeadband(xboxcontroller.getRightX(), Constants.Swerve.stickDeadband));
-        double rotationVal = rotationLimiter.calculate(
-                MathUtil.applyDeadband(xboxcontroller.getLeftX(), Constants.Swerve.stickDeadband));
-
-        /* Drive */
-        swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-                rotationVal * Constants.Swerve.maxAngularVelocity,
-                false,
-                true);
 
     }
 

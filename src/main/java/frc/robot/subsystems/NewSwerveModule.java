@@ -2,9 +2,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -29,8 +30,8 @@ public class NewSwerveModule {
     private RelativeEncoder integratedAngleEncoder;
     private CANcoder angleEncoder;
 
-    private final SparkMaxPIDController driveController;
-    private final SparkMaxPIDController angleController;
+    private final SparkPIDController driveController;
+    private final SparkPIDController angleController;
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
             Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
@@ -63,7 +64,7 @@ public class NewSwerveModule {
         // controller which
         // REV and CTRE are not
 
-        // desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
+        desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
@@ -130,12 +131,13 @@ public class NewSwerveModule {
 
     private void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents jittering.
-        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01))
-                ? lastAngle
-                : desiredState.angle;
+        if (Math.abs(desiredState.angle.getDegrees() - lastAngle.getDegrees()) <= 1.0)
+            return;
 
-        angleController.setReference(angle.getDegrees(), CANSparkMax.ControlType.kPosition);
-        lastAngle = angle;
+        Logger.Log("desiredAngle: " + desiredState.angle.getDegrees() + " currentAngle: " + getAngle().getDegrees());
+
+        angleController.setReference(desiredState.angle.getDegrees(), CANSparkMax.ControlType.kPosition);
+        lastAngle = desiredState.angle;
     }
 
     private Rotation2d getAngle() {
