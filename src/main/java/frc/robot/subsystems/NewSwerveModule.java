@@ -71,11 +71,25 @@ public class NewSwerveModule {
     }
 
     private void resetToAbsolute() {
+        Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + " position: "
+                + integratedAngleEncoder.getPosition());
+        Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + " conversion factor: "
+                + integratedAngleEncoder.getPositionConversionFactor());
         double canAngleDegrees = getCanCoderAngle().getDegrees();
         Logger.Log("raw canAngleDegrees for " + angleEncoder.getDeviceID() + ": " + canAngleDegrees);
         double absolutePosition = canAngleDegrees - angleOffset.getDegrees();
         Logger.Log("fixed canAngleDegrees for " + angleEncoder.getDeviceID() + ": " + absolutePosition);
         integratedAngleEncoder.setPosition(absolutePosition);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + " position (after): "
+                + integratedAngleEncoder.getPosition());
+
     }
 
     private void configAngleEncoder() {
@@ -96,6 +110,12 @@ public class NewSwerveModule {
         angleController.setFF(Constants.Swerve.angleKFF);
         angleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
         angleMotor.burnFlash();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         resetToAbsolute();
     }
 
@@ -114,6 +134,12 @@ public class NewSwerveModule {
         driveMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
         driveMotor.burnFlash();
         driveEncoder.setPosition(0.0);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
