@@ -4,7 +4,6 @@ import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Swerve;
 import frc.team_8840_lib.info.console.Logger;
 
 public class RobotContainer {

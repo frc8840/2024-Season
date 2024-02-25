@@ -64,13 +64,15 @@ public class DriverControl extends Command {
             }, false);
         } else {
 
-            /* Get Values, Deadband */
+            // get values from the Xbox Controller joysticks
+            // apply the deadband so we don't do anything right around the center of the
+            // joysticks
             double translationVal = translationLimiter.calculate(
                     MathUtil.applyDeadband(xboxcontroller.getRightY(), Constants.Swerve.stickDeadband));
             double strafeVal = strafeLimiter.calculate(
                     MathUtil.applyDeadband(-xboxcontroller.getRightX(), Constants.Swerve.stickDeadband));
             double rotationVal = rotationLimiter.calculate(
-                    MathUtil.applyDeadband(xboxcontroller.getLeftX(), Constants.Swerve.stickDeadband));
+                    MathUtil.applyDeadband(-xboxcontroller.getLeftX(), Constants.Swerve.stickDeadband));
 
             /* Drive */
             swerve.drive(
