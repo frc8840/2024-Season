@@ -29,10 +29,10 @@ public final class Constants {
         public static final double angleGearRatio = (21.4 / 1.0); // SDS website for MK4i says 150/7:1 (was 12.8:1)
 
         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-                new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
                 new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+                new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
+                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0));
 
         /* Swerve Voltage Compensation */
         public static final double voltageComp = 12.0;
@@ -64,7 +64,7 @@ public final class Constants {
         public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
         /* Swerve Profiling Values */
-        public static final double maxSpeed = 4.5; // meters per second
+        public static final double maxSpeed = 2.0; // meters per second
         public static final double maxAngularVelocity = 11.5;
 
         /* Neutral Modes */
@@ -80,44 +80,20 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 {
-            public static final int driveMotorID = 12;
-            public static final int angleMotorID = 11;
-            public static final int canCoderID = 21;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(218.0);
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
-        }
+        public static final SwerveModuleConstants FLconstants = new SwerveModuleConstants(12, 11,
+                21, Rotation2d.fromDegrees(128.0));
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 {
-            public static final int driveMotorID = 14;
-            public static final int angleMotorID = 13;
-            public static final int canCoderID = 22;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(249.0);
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
-        }
+        public static final SwerveModuleConstants FRconstants = new SwerveModuleConstants(14, 13, 22,
+                Rotation2d.fromDegrees(339.0));
 
         /* Back Left Module - Module 2 */
-        public static final class Mod2 {
-            public static final int driveMotorID = 18;
-            public static final int angleMotorID = 17;
-            public static final int canCoderID = 24;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(110.0);
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
-        }
+        public static final SwerveModuleConstants BLconstants = new SwerveModuleConstants(18, 17, 24,
+                Rotation2d.fromDegrees(200.0));
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 {
-            public static final int driveMotorID = 16;
-            public static final int angleMotorID = 15;
-            public static final int canCoderID = 23;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(140.0);
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
-        }
+        public static final SwerveModuleConstants BRconstants = new SwerveModuleConstants(16, 15, 23,
+                Rotation2d.fromDegrees(50.0));
     }
 
     public static final class AutoConstants {

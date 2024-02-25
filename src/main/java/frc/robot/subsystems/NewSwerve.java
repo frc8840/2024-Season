@@ -37,12 +37,12 @@ public class NewSwerve extends SubsystemBase {
         };
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), startPositions);
 
-        // TODO: describe the order of the modules here
+        // order is always FRONT LEFT, FRONT RIGHT, BACK LEFT, BACK RIGHT
         mSwerveMods = new NewSwerveModule[] {
-                new NewSwerveModule(0, Constants.Swerve.Mod0.constants),
-                new NewSwerveModule(1, Constants.Swerve.Mod1.constants),
-                new NewSwerveModule(2, Constants.Swerve.Mod2.constants),
-                new NewSwerveModule(3, Constants.Swerve.Mod3.constants)
+                new NewSwerveModule(0, Constants.Swerve.FLconstants),
+                new NewSwerveModule(1, Constants.Swerve.FRconstants),
+                new NewSwerveModule(2, Constants.Swerve.BLconstants),
+                new NewSwerveModule(3, Constants.Swerve.BRconstants)
         };
 
         field = new Field2d();
