@@ -13,6 +13,7 @@ public class Settings {
 
     // CONTROLLER SETTINGS
     public static final int OPERATOR_CONTROLLER_PORT = 0;
+    public static final int DRIVER_CONTROLLER_PORT = 1;
 
     // ARM SETTINGS
     public static final int BASE_MOTOR_ID = 31;
