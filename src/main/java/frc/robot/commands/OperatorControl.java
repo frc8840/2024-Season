@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.PickUpNote;
 import frc.team_8840_lib.info.console.Logger;
 import frc.robot.subsystems.Arm.ArmPosition;
 
@@ -13,6 +14,7 @@ public class OperatorControl extends Command {
     private PS4Controller ps4controller;
 
     private Climber climber;
+    private PickUpNote intake;
     // private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
@@ -22,9 +24,10 @@ public class OperatorControl extends Command {
     private boolean armInPosition = false;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Climber climber) {
+    public OperatorControl(Climber climber, PickUpNote pIntake) {
         addRequirements(climber);
         this.climber = climber;
+        this.intake = pIntake;
         // this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
@@ -52,6 +55,14 @@ public class OperatorControl extends Command {
             climber.climb();
         } else if (ps4controller.getR1ButtonPressed()) {
             climber.drop();
+        }
+
+        if (ps4controller.getCircleButton()) {
+            intake.pIntake();
+        } else if (ps4controller.getSquareButton()) {
+            intake.pOuttake();
+        } else {
+            intake.pStop();
         }
 
         // if (ps4controller.getPOV() == 270) {
