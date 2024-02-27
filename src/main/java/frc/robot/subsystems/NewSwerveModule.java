@@ -102,8 +102,13 @@ public class NewSwerveModule {
         angleController.setD(Constants.Swerve.angleKD);
         angleController.setFF(Constants.Swerve.angleKFF);
         angleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
-        angleMotor.burnFlash();
         resetToAbsolute();
+        angleMotor.burnFlash();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Logger.Log("interrupted");
+        }
     }
 
     private void configDriveMotor() {
@@ -119,8 +124,13 @@ public class NewSwerveModule {
         driveController.setD(Constants.Swerve.angleKD);
         driveController.setFF(Constants.Swerve.angleKFF);
         driveMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
-        driveMotor.burnFlash();
         driveEncoder.setPosition(0.0);
+        driveMotor.burnFlash();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Logger.Log("interrupted");
+        }
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {

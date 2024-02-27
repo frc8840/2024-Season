@@ -24,29 +24,31 @@ public class Climber extends SubsystemBase {
         rMotor.restoreFactoryDefaults();
 
         // Set the current limits
-        lMotor.setSmartCurrentLimit(100, 100);
-        // lMotor.setSecondaryCurrentLimit(85);
-        rMotor.setSmartCurrentLimit(100, 100);
-        // rMotor.setSecondaryCurrentLimit(85);
+        lMotor.setSmartCurrentLimit(80, 80);
+        lMotor.setSecondaryCurrentLimit(85);
+        rMotor.setSmartCurrentLimit(80, 80);
+        rMotor.setSecondaryCurrentLimit(85);
 
         // // Set the ramp rate since it jumps to full speed too quickly - don't want to
         // // break the robot!
-        // lMotor.setOpenLoopRampRate(0.2);
-        // rMotor.setOpenLoopRampRate(0.2);
+        lMotor.setOpenLoopRampRate(0.2);
+        rMotor.setOpenLoopRampRate(0.2);
 
-        // // Set the idle mode to brake
-        // lMotor.setIdleMode(IdleMode.kBrake);
-        // rMotor.setIdleMode(IdleMode.kBrake);
+        // Set the idle mode to brake
+        lMotor.setIdleMode(IdleMode.kBrake);
+        rMotor.setIdleMode(IdleMode.kBrake);
 
-        // // Set the CAN timeout to 20ms
-        // lMotor.setCANTimeout(20);
-        // rMotor.setCANTimeout(20);
+        // Set the CAN timeout to 20ms
+        lMotor.setCANTimeout(20);
+        rMotor.setCANTimeout(20);
 
+        lMotor.enableVoltageCompensation(12.0);
+        rMotor.enableVoltageCompensation(12.0);
         // Update the settings
         lMotor.burnFlash();
         rMotor.burnFlash();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Logger.Log("interrupted");
         }

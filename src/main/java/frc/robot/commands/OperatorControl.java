@@ -36,17 +36,12 @@ public class OperatorControl extends Command {
 
         if (ps4controller.getL2Button()) {
             climber.Lintake();
+            climber.Rintake();
         } else if (ps4controller.getL1Button()) {
             climber.Louttake();
-        } else {
-            climber.leftStop();
-        }
-
-        if (ps4controller.getR2Button()) {
-            climber.Rintake();
-        } else if (ps4controller.getR1Button()) {
             climber.Routtake();
         } else {
+            climber.leftStop();
             climber.rightStop();
         }
 
