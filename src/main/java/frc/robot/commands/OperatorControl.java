@@ -8,6 +8,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.PickUpNote;
 import frc.team_8840_lib.info.console.Logger;
 import frc.robot.subsystems.Arm.ArmPosition;
+import frc.robot.subsystems.ArmShooter;
 
 public class OperatorControl extends Command {
 
@@ -15,6 +16,7 @@ public class OperatorControl extends Command {
 
     private Climber climber;
     private PickUpNote intake;
+    private ArmShooter outtake;
     // private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
@@ -24,10 +26,11 @@ public class OperatorControl extends Command {
     private boolean armInPosition = false;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Climber climber, PickUpNote pIntake) {
+    public OperatorControl(Climber climber, PickUpNote pIntake, ArmShooter outtake) {
         addRequirements(climber);
         this.climber = climber;
         this.intake = pIntake;
+        this.outtake = outtake;
         // this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
@@ -56,13 +59,21 @@ public class OperatorControl extends Command {
         } else if (ps4controller.getR1ButtonPressed()) {
             climber.drop();
         }
-
+        // poop
         if (ps4controller.getCircleButton()) {
             intake.pIntake();
-        } else if (ps4controller.getSquareButton()) {
+        } else if (ps4controller.getCircleButton()) {
             intake.pOuttake();
         } else {
             intake.pStop();
+        }
+
+        if (ps4controller.getSquareButton()) {
+            outtake.sIntake();
+        } else if (ps4controller.getSquareButton()) {
+            outtake.sOuttake();
+        } else {
+            outtake.sStop();
         }
 
         // if (ps4controller.getPOV() == 270) {
