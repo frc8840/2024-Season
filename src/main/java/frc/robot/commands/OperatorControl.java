@@ -34,6 +34,9 @@ public class OperatorControl extends Command {
     @Override
     public void execute() {
 
+        Logger.Log("L position: " + climber.lEncoder.getPosition());
+        Logger.Log("R position: " + climber.rEncoder.getPosition());
+
         if (ps4controller.getL2Button()) {
             climber.Lintake();
             climber.Rintake();
@@ -43,6 +46,12 @@ public class OperatorControl extends Command {
         } else {
             climber.leftStop();
             climber.rightStop();
+        }
+
+        if (ps4controller.getR2ButtonPressed()) {
+            climber.climb();
+        } else if (ps4controller.getR1ButtonPressed()) {
+            climber.drop();
         }
 
         // if (ps4controller.getPOV() == 270) {

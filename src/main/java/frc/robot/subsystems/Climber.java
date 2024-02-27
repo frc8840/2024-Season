@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Settings;
 import frc.team_8840_lib.info.console.Logger;
 
@@ -13,11 +16,22 @@ public class Climber extends SubsystemBase {
     private CANSparkMax lMotor;
     private CANSparkMax rMotor;
 
+    public RelativeEncoder lEncoder;
+    public RelativeEncoder rEncoder;
+
+    private final SparkPIDController lController;
+    private final SparkPIDController rController;
+
     public Climber() {
 
         // Assumption of use of a NEO brushless motor
         lMotor = new CANSparkMax(Settings.LCLIMBER_MOTOR_ID, MotorType.kBrushless);
+        lEncoder = lMotor.getEncoder();
+        lController = lMotor.getPIDController();
+
         rMotor = new CANSparkMax(Settings.RCLIMBER_MOTOR_ID, MotorType.kBrushless);
+        rEncoder = rMotor.getEncoder();
+        rController = rMotor.getPIDController();
 
         // Restore factory defaults
         lMotor.restoreFactoryDefaults();
@@ -44,6 +58,21 @@ public class Climber extends SubsystemBase {
 
         lMotor.enableVoltageCompensation(12.0);
         rMotor.enableVoltageCompensation(12.0);
+
+        // controller and encoder
+        lController.setP(Constants.Climber.climberKP);
+        lController.setI(Constants.Climber.climberKI);
+        lController.setD(Constants.Climber.climberKD);
+        lController.setFF(Constants.Climber.climberKFF);
+
+        rController.setP(Constants.Climber.climberKP);
+        rController.setI(Constants.Climber.climberKI);
+        rController.setD(Constants.Climber.climberKD);
+        rController.setFF(Constants.Climber.climberKFF);
+
+        lEncoder.setPosition(0.0);
+        rEncoder.setPosition(0.0);
+
         // Update the settings
         lMotor.burnFlash();
         rMotor.burnFlash();
@@ -52,7 +81,8 @@ public class Climber extends SubsystemBase {
         } catch (InterruptedException e) {
             Logger.Log("interrupted");
         }
-        Logger.Log("lmotor current limit: ");
+        Logger.Log("L position: " + lEncoder.getPosition());
+        Logger.Log("R position: " + rEncoder.getPosition());
     }
 
     public void Lintake() {
@@ -81,6 +111,16 @@ public class Climber extends SubsystemBase {
 
     public void rightStop() {
         rMotor.set(0);
+    }
+
+    public void climb() {
+        lController.setReference(10, CANSparkMax.ControlType.kPosition);
+        rController.setReference(10, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void drop() {
+        lController.setReference(0, CANSparkMax.ControlType.kPosition);
+        rController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
 }
