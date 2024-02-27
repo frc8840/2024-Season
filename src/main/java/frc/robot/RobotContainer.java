@@ -5,6 +5,7 @@ import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.PickUpNote;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ArmShooter;
 import frc.team_8840_lib.info.console.Logger;
 
 public class RobotContainer {
@@ -12,6 +13,7 @@ public class RobotContainer {
     private Climber climber;
     private NewSwerve swerve;
     private PickUpNote intake;
+    private ArmShooter outtake;
 
     public static RobotContainer getInstance() {
         return instance;
@@ -21,9 +23,11 @@ public class RobotContainer {
         instance = this;
         climber = new Climber();
         intake = new PickUpNote();
-        OperatorControl operatorControl = new OperatorControl(climber, intake);
+        outtake = new ArmShooter();
+        OperatorControl operatorControl = new OperatorControl(climber, intake, outtake);
         climber.setDefaultCommand(operatorControl);
         intake.setDefaultCommand(operatorControl);
+        outtake.setDefaultCommand(operatorControl);
 
         swerve = new NewSwerve();
         Logger.Log("finished making NewSwerve with " + swerve.getPositions());

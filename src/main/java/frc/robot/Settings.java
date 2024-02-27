@@ -27,4 +27,14 @@ public class Settings {
     public static final double MAX_ELBOW_SPEED = 0.8;
 
     public static final double CLOSED_LOOP_RAMP_RATE = 1.0;
+
+    // INTAKE SETTINGS
+    public static final int INTAKE_MOTOR_ID = 32;
+    public static final double iOUTTAKE_SPEED = 0.5;
+    public static final double iINTAKE_SPEED = -0.5;
+
+    // SHOOTER SETTINGS
+    public static final int SHOOTER_MOTOR_ID = 33;
+    public static final double sOUTTAKE_SPEED = 0.5;
+    public static final double sINTAKE_SPEED = -0.5;
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
+
         public static final class Climber {
                 public static final double climberKP = 0.1;
                 public static final double climberKI = 1e-4;
