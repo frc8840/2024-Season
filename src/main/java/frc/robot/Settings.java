@@ -4,16 +4,15 @@ import frc.team_8840_lib.utils.controllers.swerve.structs.PIDStruct;
 
 public class Settings {
 
-    // ROLLER SETTINGS
+    // CLIMBER SETTINGS
     public static final int LCLIMBER_MOTOR_ID = 30;
     public static final int RCLIMBER_MOTOR_ID = 31;
-    public static final double FAST_OUTTAKE_SPEED = 0.9;
-    public static final double SLOW_OUTTAKE_SPEED = 0.1;
-    public static final double INTAKE_SPEED = -0.9;
+    public static final double OUTTAKE_SPEED = 0.1;
+    public static final double INTAKE_SPEED = -0.1;
 
     // CONTROLLER SETTINGS
-    public static final int OPERATOR_CONTROLLER_PORT = 0;
-    public static final int DRIVER_CONTROLLER_PORT = 1;
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
 
     // ARM SETTINGS
     public static final int BASE_MOTOR_ID = 31;

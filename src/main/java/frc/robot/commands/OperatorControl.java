@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 import frc.team_8840_lib.info.console.Logger;
 import frc.robot.subsystems.Arm.ArmPosition;
 
@@ -12,7 +12,7 @@ public class OperatorControl extends Command {
 
     private PS4Controller ps4controller;
 
-    private Shooter shooter;
+    private Climber climber;
     // private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
@@ -22,9 +22,9 @@ public class OperatorControl extends Command {
     private boolean armInPosition = false;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Shooter shooter) {
-        addRequirements(shooter);
-        this.shooter = shooter;
+    public OperatorControl(Climber climber) {
+        addRequirements(climber);
+        this.climber = climber;
         // this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
@@ -34,32 +34,33 @@ public class OperatorControl extends Command {
     @Override
     public void execute() {
 
-        if (ps4controller.getL2ButtonPressed()) {
-            Logger.Log("L2 Pressed");
-        }
-        if (ps4controller.getR2ButtonPressed()) {
-            Logger.Log("R2 Pressed");
-        }
-
         if (ps4controller.getL2Button()) {
-            shooter.intake();
-        } else if (ps4controller.getR2Button() || ps4controller.getR1Button()) {
-            shooter.outtake(ps4controller.getR2Button());
+            climber.Lintake();
+        } else if (ps4controller.getL1Button()) {
+            climber.Louttake();
         } else {
-            shooter.stop();
+            climber.leftStop();
         }
 
-        if (ps4controller.getPOV() == 270) {
-            selectedPosition--;
-            if (selectedPosition < 0) {
-                selectedPosition = heightOrder.length - 1;
-            }
-        } else if (ps4controller.getPOV() == 90) {
-            selectedPosition++;
-            if (selectedPosition >= heightOrder.length) {
-                selectedPosition = 0;
-            }
+        if (ps4controller.getR2Button()) {
+            climber.Rintake();
+        } else if (ps4controller.getR1Button()) {
+            climber.Routtake();
+        } else {
+            climber.rightStop();
         }
+
+        // if (ps4controller.getPOV() == 270) {
+        // selectedPosition--;
+        // if (selectedPosition < 0) {
+        // selectedPosition = heightOrder.length - 1;
+        // }
+        // } else if (ps4controller.getPOV() == 90) {
+        // selectedPosition++;
+        // if (selectedPosition >= heightOrder.length) {
+        // selectedPosition = 0;
+        // }
+        // }
 
         /*
          * if (ps4controller.getCircleButtonReleased()) {

@@ -29,7 +29,7 @@ public class DriverControl extends Command {
 
         this.swerve = swerve;
 
-        xboxcontroller = new XboxController(Settings.OPERATOR_CONTROLLER_PORT);
+        xboxcontroller = new XboxController(Settings.DRIVER_CONTROLLER_PORT);
     }
 
     @Override
