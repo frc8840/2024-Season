@@ -59,16 +59,34 @@ public class Climber extends SubsystemBase {
         lMotor.enableVoltageCompensation(12.0);
         rMotor.enableVoltageCompensation(12.0);
 
-        // controller and encoder
-        lController.setP(Constants.Climber.climberKP);
-        lController.setI(Constants.Climber.climberKI);
-        lController.setD(Constants.Climber.climberKD);
-        lController.setFF(Constants.Climber.climberKFF);
+        double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+        kP = 5e-5;
+        kI = 1e-6;
+        kD = 0;
+        kIz = 0;
+        kFF = 0.000156;
+        kMaxOutput = 1;
+        kMinOutput = -1;
+        maxRPM = 5700;
 
-        rController.setP(Constants.Climber.climberKP);
-        rController.setI(Constants.Climber.climberKI);
-        rController.setD(Constants.Climber.climberKD);
-        rController.setFF(Constants.Climber.climberKFF);
+        maxVel = 2000; // rpm
+        maxAcc = 1500;
+
+        // left
+        lController.setP(kP);
+        lController.setI(kI);
+        lController.setD(kD);
+        lController.setIZone(kIz);
+        lController.setFF(kFF);
+        lController.setOutputRange(kMinOutput, kMaxOutput);
+
+        // right
+        rController.setP(kP);
+        rController.setI(kI);
+        rController.setD(kD);
+        rController.setIZone(kIz);
+        rController.setFF(kFF);
+        rController.setOutputRange(kMinOutput, kMaxOutput);
 
         lEncoder.setPosition(0.0);
         rEncoder.setPosition(0.0);
