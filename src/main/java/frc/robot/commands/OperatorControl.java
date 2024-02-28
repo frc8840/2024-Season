@@ -25,6 +25,8 @@ public class OperatorControl extends Command {
                                       // PS4 controller.
     private boolean armInPosition = false;
 
+    private String lastButtonPressed = null;
+
     // Make sure the roller imported is the one from subsystems! Not from settings.
     public OperatorControl(Climber climber, PickUpNote pIntake, ArmShooter outtake) {
         addRequirements(climber);
@@ -39,42 +41,48 @@ public class OperatorControl extends Command {
 
     @Override
     public void execute() {
+        // this function is calld by WPILIB 50 times per second
 
-        Logger.Log("L position: " + climber.lEncoder.getPosition());
-        Logger.Log("R position: " + climber.rEncoder.getPosition());
+        // Logger.Log("L position: " + climber.lEncoder.getPosition());
+        // Logger.Log("R position: " + climber.rEncoder.getPosition());
 
         if (ps4controller.getL2Button()) {
             climber.Lintake();
             climber.Rintake();
+            lastButtonPressed = "L2";
         } else if (ps4controller.getL1Button()) {
             climber.Louttake();
             climber.Routtake();
-        } else {
+            lastButtonPressed = "L1";
+        } else if (lastButtonPressed != null) {
+            lastButtonPressed = null;
             climber.leftStop();
             climber.rightStop();
         }
 
         if (ps4controller.getR2ButtonPressed()) {
             climber.climb();
+            Logger.Log("climbing now");
         } else if (ps4controller.getR1ButtonPressed()) {
             climber.drop();
+            Logger.Log("dropping now");
         }
         // poop
-        if (ps4controller.getCircleButton()) {
-            intake.pIntake();
-        } else if (ps4controller.getCircleButton()) {
-            intake.pOuttake();
-        } else {
-            intake.pStop();
-        }
+        // if (ps4controller.getCircleButton()) {
+        // intake.pIntake();
+        // } else if (ps4controller.getCircleButton()) {
+        // intake.pOuttake();
+        // } else {
+        // intake.pStop();
+        // }
 
-        if (ps4controller.getSquareButton()) {
-            outtake.sIntake();
-        } else if (ps4controller.getSquareButton()) {
-            outtake.sOuttake();
-        } else {
-            outtake.sStop();
-        }
+        // if (ps4controller.getSquareButton()) {
+        // outtake.sIntake();
+        // } else if (ps4controller.getSquareButton()) {
+        // outtake.sOuttake();
+        // } else {
+        // outtake.sStop();
+        // }
 
         // if (ps4controller.getPOV() == 270) {
         // selectedPosition--;

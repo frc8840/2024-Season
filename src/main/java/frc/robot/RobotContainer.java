@@ -22,12 +22,12 @@ public class RobotContainer {
     public RobotContainer() {
         instance = this;
         climber = new Climber();
-        intake = new PickUpNote();
-        outtake = new ArmShooter();
+        // intake = new PickUpNote();
+        // outtake = new ArmShooter();
         OperatorControl operatorControl = new OperatorControl(climber, intake, outtake);
         climber.setDefaultCommand(operatorControl);
-        intake.setDefaultCommand(operatorControl);
-        outtake.setDefaultCommand(operatorControl);
+        // intake.setDefaultCommand(operatorControl);
+        // outtake.setDefaultCommand(operatorControl);
 
         swerve = new NewSwerve();
         Logger.Log("finished making NewSwerve with " + swerve.getPositions());

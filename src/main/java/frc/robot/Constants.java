@@ -12,8 +12,8 @@ public final class Constants {
 
         public static final class Climber {
                 public static final double climberKP = 0.1;
-                public static final double climberKI = 1e-4;
-                public static final double climberKD = 1;
+                public static final double climberKI = 0.0;
+                public static final double climberKD = 0.02;
                 public static final double climberKFF = 0.0;
 
         }

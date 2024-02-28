@@ -114,8 +114,8 @@ public class Climber extends SubsystemBase {
     }
 
     public void climb() {
-        lController.setReference(10, CANSparkMax.ControlType.kPosition);
-        rController.setReference(10, CANSparkMax.ControlType.kPosition);
+        lController.setReference(20, CANSparkMax.ControlType.kPosition);
+        rController.setReference(20, CANSparkMax.ControlType.kPosition);
     }
 
     public void drop() {
