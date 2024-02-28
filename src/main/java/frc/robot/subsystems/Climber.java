@@ -59,7 +59,7 @@ public class Climber extends SubsystemBase {
         lMotor.enableVoltageCompensation(12.0);
         rMotor.enableVoltageCompensation(12.0);
 
-        double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+        double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr;
         kP = 5e-5;
         kI = 1e-6;
         kD = 0;
@@ -67,10 +67,13 @@ public class Climber extends SubsystemBase {
         kFF = 0.000156;
         kMaxOutput = 1;
         kMinOutput = -1;
-        maxRPM = 5700;
 
+        minVel = 0; // rpm // TODO is this correct?
         maxVel = 2000; // rpm
         maxAcc = 1500;
+        allowedErr = 0; // TODO is this correct?
+
+        int smartMotionSlot = 0;
 
         // left
         lController.setP(kP);
@@ -79,7 +82,10 @@ public class Climber extends SubsystemBase {
         lController.setIZone(kIz);
         lController.setFF(kFF);
         lController.setOutputRange(kMinOutput, kMaxOutput);
-
+        lController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+        lController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+        lController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+        lController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
         // right
         rController.setP(kP);
         rController.setI(kI);
@@ -87,6 +93,10 @@ public class Climber extends SubsystemBase {
         rController.setIZone(kIz);
         rController.setFF(kFF);
         rController.setOutputRange(kMinOutput, kMaxOutput);
+        lController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+        lController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+        lController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+        lController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
 
         lEncoder.setPosition(0.0);
         rEncoder.setPosition(0.0);
