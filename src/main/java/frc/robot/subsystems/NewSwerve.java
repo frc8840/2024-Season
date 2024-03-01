@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,7 +26,6 @@ public class NewSwerve extends SubsystemBase {
 
     public NewSwerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
-        gyro.configFactoryDefault();
         zeroGyro();
 
         startPositions = new SwerveModulePosition[] {
@@ -100,8 +99,8 @@ public class NewSwerve extends SubsystemBase {
 
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro)
-                ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-                : Rotation2d.fromDegrees(gyro.getYaw());
+                ? Rotation2d.fromDegrees(360 - gyro.getAngle())
+                : Rotation2d.fromDegrees(gyro.getAngle());
     }
 
     @Override
