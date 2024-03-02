@@ -19,8 +19,8 @@ public class OperatorControl extends Command {
     private ArmShooter outtake;
     private Arm arm;
 
-    private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
-            ArmPosition.HIGH_CONE };
+    private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.WRIST, ArmPosition.AMPSHOOTING,
+            ArmPosition.SPEAKERSHOOTING };
     private int selectedPosition = 0; // The selected index of the height order, changed through the arrow keys on the
                                       // PS4 controller.
     private boolean armInPosition = false;
@@ -61,8 +61,15 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getTriangleButtonPressed()) {
-            arm.setArmPosition(ArmPosition.TEST);
-            Logger.Log("Triangle Pressed");
+            arm.setArmPosition(ArmPosition.SHOULDER);
+        }
+
+        if (ps4controller.getTouchpadPressed()) {
+            arm.setArmPosition(ArmPosition.ELBOW);
+        }
+
+        if (ps4controller.getPSButtonPressed()) {
+            arm.setArmPosition(ArmPosition.WRIST);
         }
 
         if (ps4controller.getR2ButtonPressed()) {
