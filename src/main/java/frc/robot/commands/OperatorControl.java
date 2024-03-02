@@ -61,7 +61,7 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getTriangleButtonPressed()) {
-            arm.setArmPosition(ArmPosition.REST);
+            arm.setArmPosition(ArmPosition.TEST);
         }
 
         if (ps4controller.getR2ButtonPressed()) {

@@ -157,7 +157,7 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPosition {
         REST(0, 0, 0),
-        GROUND_INTAKE(0, 0, 0),
+        TEST(90, 0, 0),
         DOUBLE_SUBSTATION_INTAKE(0, 0, 0),
         HYBRID(0, 0, 0),
         MID_CONE(0, 0, 0),
