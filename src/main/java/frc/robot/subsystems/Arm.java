@@ -12,63 +12,82 @@ import frc.team_8840_lib.controllers.specifics.SparkMaxEncoderWrapper;
 import frc.team_8840_lib.listeners.Robot;
 
 public class Arm extends SubsystemBase {
-    private CANSparkMax baseMotor;
+    private CANSparkMax shoulderMotor;
     private CANSparkMax elbowMotor;
-    private SparkMaxEncoderWrapper baseEncoder;
+    private CANSparkMax wristMotor;
+    private SparkMaxEncoderWrapper shoulderEncoder;
     private SparkMaxEncoderWrapper elbowEncoder;
-    private SparkPIDController basePID;
+    private SparkMaxEncoderWrapper wristEncoder;
+    private SparkPIDController shoulderPID;
     private SparkPIDController elbowPID;
+    private SparkPIDController wristPID;
     private ArmPosition position = ArmPosition.REST;
 
     public Arm() {
-        baseMotor = new CANSparkMax(Settings.BASE_MOTOR_ID, MotorType.kBrushless);
+        shoulderMotor = new CANSparkMax(Settings.SHOULDER_MOTOR_ID, MotorType.kBrushless);
         elbowMotor = new CANSparkMax(Settings.ELBOW_MOTOR_ID, MotorType.kBrushless);
+        wristMotor = new CANSparkMax(Settings.WRIST_MOTOR_ID, MotorType.kBrushless);
 
-        baseEncoder = new SparkMaxEncoderWrapper(baseMotor);
+        shoulderEncoder = new SparkMaxEncoderWrapper(shoulderMotor);
         elbowEncoder = new SparkMaxEncoderWrapper(elbowMotor);
+        wristEncoder = new SparkMaxEncoderWrapper(wristMotor);
 
-        baseEncoder.setManualOffset(true);
-        baseEncoder.setPosition(0);
-        baseEncoder.setManualConversion(Robot.isSimulation());
+        shoulderEncoder.setManualOffset(true);
+        shoulderEncoder.setPosition(0);
+        shoulderEncoder.setManualConversion(Robot.isSimulation());
 
         elbowEncoder.setManualOffset(true);
         elbowEncoder.setPosition(0);
         elbowEncoder.setManualConversion(Robot.isSimulation());
 
-        baseMotor.restoreFactoryDefaults();
+        wristEncoder.setManualOffset(true);
+        wristEncoder.setPosition(0);
+        wristEncoder.setManualConversion(Robot.isSimulation());
+
+        shoulderMotor.restoreFactoryDefaults();
         elbowMotor.restoreFactoryDefaults();
+        wristMotor.restoreFactoryDefaults();
 
-        baseMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        shoulderMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        baseMotor.setSmartCurrentLimit(25);
-        baseMotor.setSecondaryCurrentLimit(30);
+        shoulderMotor.setSmartCurrentLimit(25);
+        shoulderMotor.setSecondaryCurrentLimit(30);
 
         elbowMotor.setSmartCurrentLimit(25);
         elbowMotor.setSecondaryCurrentLimit(30);
 
-        baseMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
-        elbowMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
+        wristMotor.setSmartCurrentLimit(25);
+        wristMotor.setSecondaryCurrentLimit(30);
 
-        baseMotor.enableVoltageCompensation(12);
+        shoulderMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
+        elbowMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
+        wristMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
+
+        shoulderMotor.enableVoltageCompensation(12);
         elbowMotor.enableVoltageCompensation(12);
+        wristMotor.enableVoltageCompensation(12);
 
         double positionConversionFactor = (1 / Settings.GEAR_RATIO) * 360;
-        baseEncoder.setPositionConversionFactor(positionConversionFactor);
+        shoulderEncoder.setPositionConversionFactor(positionConversionFactor);
         elbowEncoder.setPositionConversionFactor(positionConversionFactor);
+        wristEncoder.setPositionConversionFactor(positionConversionFactor);
 
         double velocityConversionFactor = positionConversionFactor / 60;
-        baseEncoder.setVelocityConversionFactor(velocityConversionFactor);
+        shoulderEncoder.setVelocityConversionFactor(velocityConversionFactor);
         elbowEncoder.setVelocityConversionFactor(velocityConversionFactor);
+        wristEncoder.setVelocityConversionFactor(velocityConversionFactor);
 
-        basePID = baseMotor.getPIDController();
+        shoulderPID = shoulderMotor.getPIDController();
         elbowPID = elbowMotor.getPIDController();
+        wristPID = elbowMotor.getPIDController();
 
-        basePID.setP(Settings.BASE_PID.kP);
-        basePID.setI(Settings.BASE_PID.kI);
-        basePID.setD(Settings.BASE_PID.kD);
-        basePID.setIZone(Settings.BASE_PID.kIZone);
-        basePID.setFF(Settings.BASE_PID.kF);
+        shoulderPID.setP(Settings.SHOULDER_PID.kP);
+        shoulderPID.setI(Settings.SHOULDER_PID.kI);
+        shoulderPID.setD(Settings.SHOULDER_PID.kD);
+        shoulderPID.setIZone(Settings.SHOULDER_PID.kIZone);
+        shoulderPID.setFF(Settings.SHOULDER_PID.kF);
 
         elbowPID.setP(Settings.ELBOW_PID.kP);
         elbowPID.setI(Settings.ELBOW_PID.kI);
@@ -76,21 +95,30 @@ public class Arm extends SubsystemBase {
         elbowPID.setIZone(Settings.ELBOW_PID.kIZone);
         elbowPID.setFF(Settings.ELBOW_PID.kF);
 
-        basePID.setOutputRange(-Settings.MAX_BASE_SPEED, Settings.MAX_BASE_SPEED);
+        wristPID.setP(Settings.WRIST_PID.kP);
+        wristPID.setI(Settings.WRIST_PID.kI);
+        wristPID.setD(Settings.WRIST_PID.kD);
+        wristPID.setIZone(Settings.WRIST_PID.kIZone);
+        wristPID.setFF(Settings.WRIST_PID.kF);
+
+        shoulderPID.setOutputRange(-Settings.MAX_SHOULDER_SPEED, Settings.MAX_SHOULDER_SPEED);
         elbowPID.setOutputRange(-Settings.MAX_ELBOW_SPEED, Settings.MAX_ELBOW_SPEED);
+        wristPID.setOutputRange(-Settings.MAX_WRIST_SPEED, Settings.MAX_WRIST_SPEED);
 
-        basePID.setFeedbackDevice(baseEncoder.getEncoder());
+        shoulderPID.setFeedbackDevice(shoulderEncoder.getEncoder());
         elbowPID.setFeedbackDevice(elbowEncoder.getEncoder());
+        wristPID.setFeedbackDevice(wristEncoder.getEncoder());
 
-        baseMotor.burnFlash();
+        shoulderMotor.burnFlash();
         elbowMotor.burnFlash();
+        wristMotor.burnFlash();
     }
 
     public void setArmPosition(ArmPosition position) {
         this.position = position;
 
-        basePID.setReference(
-                baseEncoder.calculatePosition(position.baseAngle),
+        shoulderPID.setReference(
+                shoulderEncoder.calculatePosition(position.shoulderAngle),
                 ControlType.kPosition,
                 0);
 
@@ -98,14 +126,23 @@ public class Arm extends SubsystemBase {
                 elbowEncoder.calculatePosition(position.elbowAngle),
                 ControlType.kPosition,
                 0);
+
+        wristPID.setReference(
+                wristEncoder.calculatePosition(position.wristAngle),
+                ControlType.kPosition,
+                0);
     }
 
-    public void setBaseSpeed(double speed) {
-        baseMotor.set(speed);
+    public void setShoulderSpeed(double speed) {
+        shoulderMotor.set(speed);
     }
 
     public void setElbowSpeed(double speed) {
         elbowMotor.set(speed);
+    }
+
+    public void setWristSpeed(double speed) {
+        wristMotor.set(speed);
     }
 
     public ArmPosition getArmPosition() {
@@ -113,24 +150,27 @@ public class Arm extends SubsystemBase {
     }
 
     public void reportToNetworkTables() {
-        SmartDashboard.putNumber("Arm/Base Encoder", baseEncoder.getPosition());
+        SmartDashboard.putNumber("Arm/Shoulder Encoder", shoulderEncoder.getPosition());
         SmartDashboard.putNumber("Arm/Elbow Encoder", elbowEncoder.getPosition());
+        SmartDashboard.putNumber("Arm/Wrist Encoder", wristEncoder.getPosition());
     }
 
     public enum ArmPosition {
-        REST(0, 0),
-        GROUND_INTAKE(0, 0),
-        DOUBLE_SUBSTATION_INTAKE(0, 0),
-        HYBRID(0, 0),
-        MID_CONE(0, 0),
-        HIGH_CONE(0, 0);
+        REST(0, 0, 0),
+        GROUND_INTAKE(0, 0, 0),
+        DOUBLE_SUBSTATION_INTAKE(0, 0, 0),
+        HYBRID(0, 0, 0),
+        MID_CONE(0, 0, 0),
+        HIGH_CONE(0, 0, 0);
 
-        public final double baseAngle;
+        public final double shoulderAngle;
         public final double elbowAngle;
+        public final double wristAngle;
 
-        private ArmPosition(double baseAngle, double elbowAngle) {
-            this.baseAngle = baseAngle;
+        private ArmPosition(double shoulderAngle, double elbowAngle, double wristAngle) {
+            this.shoulderAngle = shoulderAngle;
             this.elbowAngle = elbowAngle;
+            this.wristAngle = wristAngle;
         }
     }
 

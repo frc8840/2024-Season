@@ -17,7 +17,7 @@ public class OperatorControl extends Command {
     private Climber climber;
     private PickUpNote intake;
     private ArmShooter outtake;
-    // private Arm arm;
+    private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.HYBRID, ArmPosition.MID_CONE,
             ArmPosition.HIGH_CONE };
@@ -33,7 +33,7 @@ public class OperatorControl extends Command {
         this.climber = climber;
         this.intake = pIntake;
         this.outtake = outtake;
-        // this.arm = arm;
+        this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
 
@@ -49,7 +49,7 @@ public class OperatorControl extends Command {
         if (ps4controller.getL2Button()) {
             climber.Lintake();
             climber.Rintake();
-            lastButtonPressed = "L2";
+
         } else if (ps4controller.getL1Button()) {
             climber.Louttake();
             climber.Routtake();
@@ -60,6 +60,10 @@ public class OperatorControl extends Command {
             climber.rightStop();
         }
 
+        if (ps4controller.getTriangleButtonPressed()) {
+            arm.setArmPosition(ArmPosition.REST);
+        }
+
         if (ps4controller.getR2ButtonPressed()) {
             climber.climb();
             Logger.Log("climbing now");
@@ -67,7 +71,7 @@ public class OperatorControl extends Command {
             climber.drop();
             Logger.Log("dropping now");
         }
-        // poop
+
         // if (ps4controller.getCircleButton()) {
         // intake.pIntake();
         // } else if (ps4controller.getCircleButton()) {
@@ -117,4 +121,5 @@ public class OperatorControl extends Command {
          * heightOrder[selectedPosition].name());
          */
     }
+
 }
