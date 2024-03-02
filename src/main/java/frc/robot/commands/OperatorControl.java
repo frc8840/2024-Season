@@ -61,66 +61,77 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getTriangleButtonPressed()) {
-            arm.setArmPosition(ArmPosition.TEST);
-            Logger.Log("Triangle Pressed");
+            arm.setArmPosition(ArmPosition.SHOULDER);
+
+            if (ps4controller.getTouchpadPressed()) {
+                arm.setArmPosition(ArmPosition.ELBOW);
+            }
+
+            if (ps4controller.getPSButtonPressed()) {
+                arm.setArmPosition(ArmPosition.SHOULDER);
+            }
+
+            if (ps4controller.getCrossButtonPressed()) {
+                arm.setArmPosition(ArmPosition.REST);
+            }
+
+            if (ps4controller.getR2ButtonPressed()) {
+                climber.climb();
+                Logger.Log("climbing now");
+            } else if (ps4controller.getR1ButtonPressed()) {
+                climber.drop();
+                Logger.Log("dropping now");
+            }
+
+            // if (ps4controller.getCircleButton()) {
+            // intake.pIntake();
+            // } else if (ps4controller.getCircleButton()) {
+            // intake.pOuttake();
+            // } else {
+            // intake.pStop();
+            // }
+
+            // if (ps4controller.getSquareButton()) {
+            // outtake.sIntake();
+            // } else if (ps4controller.getSquareButton()) {
+            // outtake.sOuttake();
+            // } else {
+            // outtake.sStop();
+            // }
+
+            // if (ps4controller.getPOV() == 270) {
+            // selectedPosition--;
+            // if (selectedPosition < 0) {
+            // selectedPosition = heightOrder.length - 1;
+            // }
+            // } else if (ps4controller.getPOV() == 90) {
+            // selectedPosition++;
+            // if (selectedPosition >= heightOrder.length) {
+            // selectedPosition = 0;
+            // }
+            // }
+
+            /*
+             * if (ps4controller.getCircleButtonReleased()) {
+             * armInPosition = !armInPosition;
+             * 
+             * if (armInPosition) {
+             * arm.setArmPosition(heightOrder[selectedPosition]);
+             * } else {
+             * arm.setArmPosition(ArmPosition.REST);
+             * }
+             * } else if (ps4controller.getCrossButtonReleased() && !armInPosition) {
+             * arm.setArmPosition(ArmPosition.DOUBLE_SUBSTATION_INTAKE);
+             * 
+             * armInPosition = true;
+             * }
+             * 
+             * arm.reportToNetworkTables();
+             * 
+             * SmartDashboard.putString("Selected Position",
+             * heightOrder[selectedPosition].name());
+             */
         }
 
-        if (ps4controller.getR2ButtonPressed()) {
-            climber.climb();
-            Logger.Log("climbing now");
-        } else if (ps4controller.getR1ButtonPressed()) {
-            climber.drop();
-            Logger.Log("dropping now");
-        }
-
-        // if (ps4controller.getCircleButton()) {
-        // intake.pIntake();
-        // } else if (ps4controller.getCircleButton()) {
-        // intake.pOuttake();
-        // } else {
-        // intake.pStop();
-        // }
-
-        // if (ps4controller.getSquareButton()) {
-        // outtake.sIntake();
-        // } else if (ps4controller.getSquareButton()) {
-        // outtake.sOuttake();
-        // } else {
-        // outtake.sStop();
-        // }
-
-        // if (ps4controller.getPOV() == 270) {
-        // selectedPosition--;
-        // if (selectedPosition < 0) {
-        // selectedPosition = heightOrder.length - 1;
-        // }
-        // } else if (ps4controller.getPOV() == 90) {
-        // selectedPosition++;
-        // if (selectedPosition >= heightOrder.length) {
-        // selectedPosition = 0;
-        // }
-        // }
-
-        /*
-         * if (ps4controller.getCircleButtonReleased()) {
-         * armInPosition = !armInPosition;
-         * 
-         * if (armInPosition) {
-         * arm.setArmPosition(heightOrder[selectedPosition]);
-         * } else {
-         * arm.setArmPosition(ArmPosition.REST);
-         * }
-         * } else if (ps4controller.getCrossButtonReleased() && !armInPosition) {
-         * arm.setArmPosition(ArmPosition.DOUBLE_SUBSTATION_INTAKE);
-         * 
-         * armInPosition = true;
-         * }
-         * 
-         * arm.reportToNetworkTables();
-         * 
-         * SmartDashboard.putString("Selected Position",
-         * heightOrder[selectedPosition].name());
-         */
     }
-
 }
