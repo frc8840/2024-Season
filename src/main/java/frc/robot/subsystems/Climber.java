@@ -103,11 +103,6 @@ public class Climber extends SubsystemBase {
         // Update the settings
         lMotor.burnFlash();
         rMotor.burnFlash();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Logger.Log("interrupted");
-        }
         Logger.Log("L position: " + lEncoder.getPosition());
         Logger.Log("R position: " + rEncoder.getPosition());
     }

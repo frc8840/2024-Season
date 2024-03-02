@@ -99,11 +99,6 @@ public class Arm extends SubsystemBase {
         shoulderMotor.burnFlash();
         elbowMotor.burnFlash();
         wristMotor.burnFlash();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Logger.Log("interrupted");
-        }
     }
 
     public void setArmPosition(ArmPosition position) {

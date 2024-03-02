@@ -104,11 +104,6 @@ public class NewSwerveModule {
         angleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
         resetToAbsolute();
         angleMotor.burnFlash();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Logger.Log("interrupted");
-        }
     }
 
     private void configDriveMotor() {
@@ -126,11 +121,6 @@ public class NewSwerveModule {
         driveMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
         driveEncoder.setPosition(0.0);
         driveMotor.burnFlash();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Logger.Log("interrupted");
-        }
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {

@@ -23,19 +23,30 @@ public class RobotContainer {
 
     public RobotContainer() {
         instance = this;
+
+        // construct the subsystems
+        swerve = new NewSwerve();
         arm = new Arm();
         climber = new Climber();
         // intake = new PickUpNote();
         // outtake = new ArmShooter();
-        OperatorControl operatorControl = new OperatorControl(arm, climber, intake, outtake);
-        climber.setDefaultCommand(operatorControl);
         // intake.setDefaultCommand(operatorControl);
         // outtake.setDefaultCommand(operatorControl);
 
-        swerve = new NewSwerve();
-        Logger.Log("finished making NewSwerve with " + swerve.getPositions());
+        Logger.Log("finished constructing subsystems, going to sleep");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Logger.Log("sleep interrupted");
+        }
+        Logger.Log("finished sleeping");
+
+        // now make the controls
         DriverControl driverControl = new DriverControl(swerve);
         swerve.setDefaultCommand(driverControl);
+
+        OperatorControl operatorControl = new OperatorControl(arm, climber, intake, outtake);
+        climber.setDefaultCommand(operatorControl);
     }
 
 }
