@@ -28,7 +28,7 @@ public class OperatorControl extends Command {
     private String lastButtonPressed = null;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Climber climber, PickUpNote pIntake, ArmShooter outtake) {
+    public OperatorControl(Arm arm, Climber climber, PickUpNote pIntake, ArmShooter outtake) {
         addRequirements(climber);
         this.climber = climber;
         this.intake = pIntake;
@@ -62,6 +62,7 @@ public class OperatorControl extends Command {
 
         if (ps4controller.getTriangleButtonPressed()) {
             arm.setArmPosition(ArmPosition.TEST);
+            Logger.Log("Triangle Pressed");
         }
 
         if (ps4controller.getR2ButtonPressed()) {

@@ -44,14 +44,13 @@ public class Arm extends SubsystemBase {
         elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        shoulderMotor.setSmartCurrentLimit(25);
-        shoulderMotor.setSecondaryCurrentLimit(30);
+        shoulderMotor.setSmartCurrentLimit(80);
+        elbowMotor.setSmartCurrentLimit(80);
+        wristMotor.setSmartCurrentLimit(80);
 
-        elbowMotor.setSmartCurrentLimit(25);
-        elbowMotor.setSecondaryCurrentLimit(30);
-
-        wristMotor.setSmartCurrentLimit(25);
-        wristMotor.setSecondaryCurrentLimit(30);
+        shoulderMotor.setSecondaryCurrentLimit(85);
+        elbowMotor.setSecondaryCurrentLimit(85);
+        wristMotor.setSecondaryCurrentLimit(85);
 
         shoulderMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
         elbowMotor.setClosedLoopRampRate(Settings.CLOSED_LOOP_RAMP_RATE);
@@ -96,10 +95,6 @@ public class Arm extends SubsystemBase {
         shoulderPID.setOutputRange(-Settings.MAX_SHOULDER_SPEED, Settings.MAX_SHOULDER_SPEED);
         elbowPID.setOutputRange(-Settings.MAX_ELBOW_SPEED, Settings.MAX_ELBOW_SPEED);
         wristPID.setOutputRange(-Settings.MAX_WRIST_SPEED, Settings.MAX_WRIST_SPEED);
-
-        shoulderPID.setFeedbackDevice(shoulderEncoder);
-        elbowPID.setFeedbackDevice(elbowEncoder);
-        wristPID.setFeedbackDevice(wristEncoder);
 
         shoulderMotor.burnFlash();
         elbowMotor.burnFlash();
@@ -154,7 +149,7 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPosition {
         REST(0, 0, 0),
-        TEST(5, 0, 0),
+        TEST(10, 0, 0),
         DOUBLE_SUBSTATION_INTAKE(0, 0, 0),
         HYBRID(0, 0, 0),
         MID_CONE(0, 0, 0),

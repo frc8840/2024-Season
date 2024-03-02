@@ -21,7 +21,7 @@ public class Settings {
 
     public static final double GEAR_RATIO = 192 / 1;
 
-    public static final PIDStruct SHOULDER_PID = new PIDStruct(0.010, 0.0, 0.0);
+    public static final PIDStruct SHOULDER_PID = new PIDStruct(0.10, 0.0, 0.0);
     public static final PIDStruct ELBOW_PID = new PIDStruct(0.010, 0.0, 0.0);
     public static final PIDStruct WRIST_PID = new PIDStruct(0.010, 0.0, 0.0);
 
