@@ -104,6 +104,7 @@ public class Arm extends SubsystemBase {
     public void setArmPosition(ArmPosition position) {
         this.position = position;
 
+        Logger.Log("shoulder position before:" + shoulderEncoder.getPosition());
         shoulderPID.setReference(
                 position.shoulderAngle,
                 ControlType.kPosition,
@@ -144,7 +145,7 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPosition {
         REST(0, 0, 0),
-        TEST(10, 0, 0),
+        TEST(121.5, 0, 0),
         DOUBLE_SUBSTATION_INTAKE(0, 0, 0),
         HYBRID(0, 0, 0),
         MID_CONE(0, 0, 0),
