@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -8,16 +9,15 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Settings;
-import frc.team_8840_lib.controllers.specifics.SparkMaxEncoderWrapper;
-import frc.team_8840_lib.listeners.Robot;
+import frc.team_8840_lib.info.console.Logger;
 
 public class Arm extends SubsystemBase {
     private CANSparkMax shoulderMotor;
     private CANSparkMax elbowMotor;
     private CANSparkMax wristMotor;
-    private SparkMaxEncoderWrapper shoulderEncoder;
-    private SparkMaxEncoderWrapper elbowEncoder;
-    private SparkMaxEncoderWrapper wristEncoder;
+    private RelativeEncoder shoulderEncoder;
+    private RelativeEncoder elbowEncoder;
+    private RelativeEncoder wristEncoder;
     private SparkPIDController shoulderPID;
     private SparkPIDController elbowPID;
     private SparkPIDController wristPID;
@@ -28,21 +28,13 @@ public class Arm extends SubsystemBase {
         elbowMotor = new CANSparkMax(Settings.ELBOW_MOTOR_ID, MotorType.kBrushless);
         wristMotor = new CANSparkMax(Settings.WRIST_MOTOR_ID, MotorType.kBrushless);
 
-        shoulderEncoder = new SparkMaxEncoderWrapper(shoulderMotor);
-        elbowEncoder = new SparkMaxEncoderWrapper(elbowMotor);
-        wristEncoder = new SparkMaxEncoderWrapper(wristMotor);
+        shoulderEncoder = shoulderMotor.getEncoder();
+        elbowEncoder = elbowMotor.getEncoder();
+        wristEncoder = wristMotor.getEncoder();
 
-        shoulderEncoder.setManualOffset(true);
         shoulderEncoder.setPosition(0);
-        shoulderEncoder.setManualConversion(Robot.isSimulation());
-
-        elbowEncoder.setManualOffset(true);
         elbowEncoder.setPosition(0);
-        elbowEncoder.setManualConversion(Robot.isSimulation());
-
-        wristEncoder.setManualOffset(true);
         wristEncoder.setPosition(0);
-        wristEncoder.setManualConversion(Robot.isSimulation());
 
         shoulderMotor.restoreFactoryDefaults();
         elbowMotor.restoreFactoryDefaults();
@@ -105,30 +97,35 @@ public class Arm extends SubsystemBase {
         elbowPID.setOutputRange(-Settings.MAX_ELBOW_SPEED, Settings.MAX_ELBOW_SPEED);
         wristPID.setOutputRange(-Settings.MAX_WRIST_SPEED, Settings.MAX_WRIST_SPEED);
 
-        shoulderPID.setFeedbackDevice(shoulderEncoder.getEncoder());
-        elbowPID.setFeedbackDevice(elbowEncoder.getEncoder());
-        wristPID.setFeedbackDevice(wristEncoder.getEncoder());
+        shoulderPID.setFeedbackDevice(shoulderEncoder);
+        elbowPID.setFeedbackDevice(elbowEncoder);
+        wristPID.setFeedbackDevice(wristEncoder);
 
         shoulderMotor.burnFlash();
         elbowMotor.burnFlash();
         wristMotor.burnFlash();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Logger.Log("interrupted");
+        }
     }
 
     public void setArmPosition(ArmPosition position) {
         this.position = position;
 
         shoulderPID.setReference(
-                shoulderEncoder.calculatePosition(position.shoulderAngle),
+                position.shoulderAngle,
                 ControlType.kPosition,
                 0);
 
         elbowPID.setReference(
-                elbowEncoder.calculatePosition(position.elbowAngle),
+                position.elbowAngle,
                 ControlType.kPosition,
                 0);
 
         wristPID.setReference(
-                wristEncoder.calculatePosition(position.wristAngle),
+                position.wristAngle,
                 ControlType.kPosition,
                 0);
     }
