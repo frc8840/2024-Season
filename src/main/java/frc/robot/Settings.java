@@ -19,11 +19,13 @@ public class Settings {
     public static final int ELBOW_MOTOR_ID = 41;
     public static final int WRIST_MOTOR_ID = 42;
 
-    public static final double GEAR_RATIO = 192 / 1;
+    public static final double SHOULDER_GEAR_RATIO = 266 / 1;
+    public static final double ELBOW_GEAR_RATIO = 266 / 1;
+    public static final double WRIST_GEAR_RATIO = 128 / 1;
 
     public static final PIDStruct SHOULDER_PID = new PIDStruct(0.10, 0.0, 40.0);
-    public static final PIDStruct ELBOW_PID = new PIDStruct(0.010, 0.0, 0.0);
-    public static final PIDStruct WRIST_PID = new PIDStruct(0.010, 0.0, 0.0);
+    public static final PIDStruct ELBOW_PID = new PIDStruct(0.10, 0.0, 40.0);
+    public static final PIDStruct WRIST_PID = new PIDStruct(0.10, 0.0, 40.0);
 
     public static final double MAX_SHOULDER_SPEED = 0.8;
     public static final double MAX_ELBOW_SPEED = 0.8;

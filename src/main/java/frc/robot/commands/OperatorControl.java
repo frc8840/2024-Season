@@ -43,23 +43,6 @@ public class OperatorControl extends Command {
     public void execute() {
         // this function is calld by WPILIB 50 times per second
 
-        // Logger.Log("L position: " + climber.lEncoder.getPosition());
-        // Logger.Log("R position: " + climber.rEncoder.getPosition());
-
-        if (ps4controller.getL2Button()) {
-            climber.Lintake();
-            climber.Rintake();
-
-        } else if (ps4controller.getL1Button()) {
-            climber.Louttake();
-            climber.Routtake();
-            lastButtonPressed = "L1";
-        } else if (lastButtonPressed != null) {
-            lastButtonPressed = null;
-            climber.leftStop();
-            climber.rightStop();
-        }
-
         if (ps4controller.getTriangleButtonPressed()) {
             arm.setArmPosition(ArmPosition.SHOULDER);
         }
@@ -69,7 +52,7 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getPSButtonPressed()) {
-            arm.setArmPosition(ArmPosition.SHOULDER);
+            arm.setArmPosition(ArmPosition.WRIST);
         }
 
         if (ps4controller.getCrossButtonPressed()) {
@@ -84,21 +67,21 @@ public class OperatorControl extends Command {
             Logger.Log("dropping now");
         }
 
-        // if (ps4controller.getCircleButton()) {
-        // intake.pIntake();
-        // } else if (ps4controller.getCircleButton()) {
-        // intake.pOuttake();
-        // } else {
-        // intake.pStop();
-        // }
+        if (ps4controller.getCircleButton()) {
+            intake.pIntake();
+        } else if (ps4controller.getCircleButton()) {
+            intake.pOuttake();
+        } else {
+            intake.pStop();
+        }
 
-        // if (ps4controller.getSquareButton()) {
-        // outtake.sIntake();
-        // } else if (ps4controller.getSquareButton()) {
-        // outtake.sOuttake();
-        // } else {
-        // outtake.sStop();
-        // }
+        if (ps4controller.getSquareButton()) {
+            outtake.sIntake();
+        } else if (ps4controller.getSquareButton()) {
+            outtake.sOuttake();
+        } else {
+            outtake.sStop();
+        }
 
         // if (ps4controller.getPOV() == 270) {
         // selectedPosition--;

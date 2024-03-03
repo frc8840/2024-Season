@@ -60,15 +60,9 @@ public class Arm extends SubsystemBase {
         elbowMotor.enableVoltageCompensation(12);
         wristMotor.enableVoltageCompensation(12);
 
-        double positionConversionFactor = (1 / Settings.GEAR_RATIO) * 360;
-        shoulderEncoder.setPositionConversionFactor(positionConversionFactor);
-        elbowEncoder.setPositionConversionFactor(positionConversionFactor);
-        wristEncoder.setPositionConversionFactor(positionConversionFactor);
-
-        double velocityConversionFactor = positionConversionFactor / 60;
-        shoulderEncoder.setVelocityConversionFactor(velocityConversionFactor);
-        elbowEncoder.setVelocityConversionFactor(velocityConversionFactor);
-        wristEncoder.setVelocityConversionFactor(velocityConversionFactor);
+        shoulderEncoder.setPositionConversionFactor((1 / Settings.SHOULDER_GEAR_RATIO) * 360);
+        elbowEncoder.setPositionConversionFactor((1 / Settings.ELBOW_GEAR_RATIO) * 360);
+        wristEncoder.setPositionConversionFactor((1 / Settings.WRIST_GEAR_RATIO) * 360);
 
         shoulderPID = shoulderMotor.getPIDController();
         elbowPID = elbowMotor.getPIDController();
@@ -145,9 +139,9 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPosition {
         REST(0, 0, 0),
-        SHOULDER(10, 0, 0),
-        ELBOW(0, 0, 0),
-        WRIST(0, 0, 0),
+        SHOULDER(90, 0, 0),
+        ELBOW(0, 45, 0),
+        WRIST(0, 0, -10),
         AMPSHOOTING(0, 0, 0),
         SPEAKERSHOOTING(0, 0, 0),
         TRAPSHOOTING(0, 0, 0);

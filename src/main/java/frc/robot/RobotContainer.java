@@ -28,10 +28,8 @@ public class RobotContainer {
         swerve = new NewSwerve();
         arm = new Arm();
         climber = new Climber();
-        // intake = new PickUpNote();
-        // outtake = new ArmShooter();
-        // intake.setDefaultCommand(operatorControl);
-        // outtake.setDefaultCommand(operatorControl);
+        intake = new PickUpNote();
+        outtake = new ArmShooter();
 
         Logger.Log("finished constructing subsystems, going to sleep");
         try {
