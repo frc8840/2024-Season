@@ -35,12 +35,12 @@ public class Settings {
 
     // INTAKE SETTINGS
     public static final int INTAKE_MOTOR_ID = 50;
-    public static final double iOUTTAKE_SPEED = 0.5;
-    public static final double iINTAKE_SPEED = -0.5;
+    public static final double iOUTTAKE_SPEED = 1.0;
+    public static final double iINTAKE_SPEED = -1.0;
 
     // SHOOTER SETTINGS
     public static final int SHOOTER_MOTOR_ID = 51;
     public static final int SHOOTER_MOTOR_ID2 = 52;
-    public static final double sOUTTAKE_SPEED = 0.5;
-    public static final double sINTAKE_SPEED = -0.5;
+    public static final double SHOOTER_OUT_SPEED = 1.0;
+    public static final double SHOOTER_IN_SPEED = -0.5;
 }

@@ -94,6 +94,7 @@ public class NewSwerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
+        Logger.Log("zeroGyro called");
         gyro.setYaw(0);
     }
 

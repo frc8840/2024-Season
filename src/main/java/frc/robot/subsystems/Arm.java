@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import javax.swing.plaf.synth.SynthFormattedTextFieldUI;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -66,7 +69,7 @@ public class Arm extends SubsystemBase {
 
         shoulderPID = shoulderMotor.getPIDController();
         elbowPID = elbowMotor.getPIDController();
-        wristPID = elbowMotor.getPIDController();
+        wristPID = wristMotor.getPIDController();
 
         shoulderPID.setP(Settings.SHOULDER_PID.kP);
         shoulderPID.setI(Settings.SHOULDER_PID.kI);
@@ -115,16 +118,19 @@ public class Arm extends SubsystemBase {
                 0);
     }
 
-    public void setShoulderSpeed(double speed) {
-        shoulderMotor.set(speed);
+    public void relax() {
+        shoulderMotor.setIdleMode(IdleMode.kCoast);
+        shoulderMotor.set(0);
+        elbowMotor.setIdleMode(IdleMode.kCoast);
+        elbowMotor.set(0);
+        wristMotor.setIdleMode(IdleMode.kCoast);
+        wristMotor.set(0);
     }
 
-    public void setElbowSpeed(double speed) {
-        elbowMotor.set(speed);
-    }
-
-    public void setWristSpeed(double speed) {
-        wristMotor.set(speed);
+    public void gethard() {
+        shoulderMotor.setIdleMode(IdleMode.kBrake);
+        elbowMotor.setIdleMode(IdleMode.kBrake);
+        wristMotor.setIdleMode(IdleMode.kBrake);
     }
 
     public ArmPosition getArmPosition() {
@@ -139,11 +145,11 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPosition {
         REST(0, 0, 0),
-        SHOULDER(90, 0, 0),
-        ELBOW(0, 45, 0),
-        WRIST(0, 0, -10),
-        AMPSHOOTING(0, 0, 0),
-        SPEAKERSHOOTING(0, 0, 0),
+        SHOULDER(20, 0, 0),
+        ELBOW(0, -80, 0),
+        WRIST(0, 0, 117),
+        AMPSHOOTING(0, -80, 0),
+        SPEAKERSHOOTING(0, 0, 90),
         TRAPSHOOTING(0, 0, 0);
 
         public final double shoulderAngle;

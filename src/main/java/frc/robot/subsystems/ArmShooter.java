@@ -2,50 +2,55 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Settings;
 
 public class ArmShooter extends SubsystemBase {
 
-    private CANSparkMax sMotor;
-    private CANSparkMax sMotor2;
+    private CANSparkMax leftMotor;
+    private CANSparkMax rightMotor;
 
     public ArmShooter() {
 
-        sMotor = new CANSparkMax(Settings.SHOOTER_MOTOR_ID, MotorType.kBrushless);
-        sMotor2 = new CANSparkMax(Settings.SHOOTER_MOTOR_ID2, MotorType.kBrushless);
+        leftMotor = new CANSparkMax(Settings.SHOOTER_MOTOR_ID, MotorType.kBrushless);
+        rightMotor = new CANSparkMax(Settings.SHOOTER_MOTOR_ID2, MotorType.kBrushless);
 
-        sMotor.restoreFactoryDefaults();
-        sMotor2.restoreFactoryDefaults();
+        leftMotor.restoreFactoryDefaults();
+        rightMotor.restoreFactoryDefaults();
 
-        sMotor.setSmartCurrentLimit(80, 80);
-        sMotor.setSecondaryCurrentLimit(85);
-        sMotor2.setSmartCurrentLimit(80, 80);
-        sMotor2.setSecondaryCurrentLimit(85);
+        leftMotor.setIdleMode(IdleMode.kCoast);
+        rightMotor.setIdleMode(IdleMode.kCoast);
 
-        sMotor.setOpenLoopRampRate(0.2);
-        sMotor2.setOpenLoopRampRate(0.2);
+        leftMotor.setSmartCurrentLimit(100, 80);
+        leftMotor.setSecondaryCurrentLimit(105);
 
-        sMotor.setCANTimeout(20);
-        sMotor2.setCANTimeout(20);
+        rightMotor.setSmartCurrentLimit(100, 80);
+        rightMotor.setSecondaryCurrentLimit(105);
 
-        sMotor.burnFlash();
-        sMotor2.burnFlash();
+        // sMotor.setOpenLoopRampRate(0.2);
+        // sMotor2.setOpenLoopRampRate(0.2);
+
+        leftMotor.setCANTimeout(20);
+        rightMotor.setCANTimeout(20);
+
+        leftMotor.burnFlash();
+        rightMotor.burnFlash();
     }
 
     public void sIntake() {
-        sMotor.set(Settings.sINTAKE_SPEED);
-        sMotor2.set(Settings.sINTAKE_SPEED);
+        leftMotor.set(Settings.SHOOTER_IN_SPEED);
+        rightMotor.set(-Settings.SHOOTER_IN_SPEED);
     }
 
     public void sOuttake() {
-        sMotor.set(Settings.sOUTTAKE_SPEED);
-        sMotor2.set(Settings.sOUTTAKE_SPEED);
+        leftMotor.set(Settings.SHOOTER_OUT_SPEED);
+        rightMotor.set(-Settings.SHOOTER_OUT_SPEED);
     }
 
     public void sStop() {
-        sMotor.set(0);
-        sMotor2.set(0);
+        leftMotor.set(0);
+        rightMotor.set(0);
     }
 }

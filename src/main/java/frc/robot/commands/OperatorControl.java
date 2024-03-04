@@ -47,16 +47,20 @@ public class OperatorControl extends Command {
             arm.setArmPosition(ArmPosition.SHOULDER);
         }
 
-        if (ps4controller.getTouchpadPressed()) {
-            arm.setArmPosition(ArmPosition.ELBOW);
-        }
+        // if (ps4controller.getL2ButtonPressed()) {
+        // arm.setArmPosition(ArmPosition.ELBOW);
+        // }
 
-        if (ps4controller.getPSButtonPressed()) {
+        if (ps4controller.getL1ButtonPressed()) {
             arm.setArmPosition(ArmPosition.WRIST);
         }
 
         if (ps4controller.getCrossButtonPressed()) {
             arm.setArmPosition(ArmPosition.REST);
+        }
+
+        if (ps4controller.getPSButtonPressed()) {
+            arm.setArmPosition(ArmPosition.AMPSHOOTING);
         }
 
         if (ps4controller.getR2ButtonPressed()) {
@@ -68,19 +72,23 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getCircleButton()) {
-            intake.pIntake();
-        } else if (ps4controller.getCircleButton()) {
             intake.pOuttake();
         } else {
             intake.pStop();
         }
 
         if (ps4controller.getSquareButton()) {
-            outtake.sIntake();
-        } else if (ps4controller.getSquareButton()) {
             outtake.sOuttake();
         } else {
             outtake.sStop();
+        }
+
+        if (ps4controller.getShareButtonPressed()) {
+            arm.relax();
+        }
+
+        if (ps4controller.getOptionsButtonPressed()) {
+            arm.gethard();
         }
 
         // if (ps4controller.getPOV() == 270) {
