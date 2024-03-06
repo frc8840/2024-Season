@@ -40,7 +40,7 @@ public class RobotContainer {
         Logger.Log("finished sleeping");
 
         // now make the controls
-        DriverControl driverControl = new DriverControl(swerve);
+        DriverControl driverControl = new DriverControl(swerve, arm);
         swerve.setDefaultCommand(driverControl);
 
         OperatorControl operatorControl = new OperatorControl(arm, climber, intake, outtake);

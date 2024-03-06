@@ -13,21 +13,25 @@ import frc.robot.Settings;
 import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.NewSwerveModule;
 import frc.team_8840_lib.info.console.Logger;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Arm.ArmPosition;
 
 public class DriverControl extends Command {
 
     private XboxController xboxcontroller;
     private NewSwerve swerve;
+    private Arm arm;
 
     private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
     private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
     private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public DriverControl(NewSwerve swerve) {
+    public DriverControl(NewSwerve swerve, Arm arm) {
         addRequirements(swerve);
 
         this.swerve = swerve;
+        this.arm = arm;
 
         xboxcontroller = new XboxController(Settings.DRIVER_CONTROLLER_PORT);
     }
@@ -37,6 +41,8 @@ public class DriverControl extends Command {
 
         if (xboxcontroller.getXButtonPressed()) {
             swerve.zeroGyro();
+        } else if (xboxcontroller.getAButtonPressed()) {
+            arm.setArmPosition(ArmPosition.INTAKEDEMO);
         } else {
 
             // get values from the Xbox Controller joysticks

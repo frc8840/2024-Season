@@ -150,7 +150,8 @@ public class Arm extends SubsystemBase {
         WRIST(0, 0, 117),
         AMPSHOOTING(0, -80, 0),
         SPEAKERSHOOTING(0, 0, 90),
-        TRAPSHOOTING(0, 0, 0);
+        TRAPSHOOTING(0, 0, 0),
+        INTAKEDEMO(0, 0, 117);
 
         public final double shoulderAngle;
         public final double elbowAngle;
