@@ -110,22 +110,22 @@ public class Climber extends SubsystemBase {
     }
 
     public void Lintake() {
-        lMotor.set(Settings.INTAKE_SPEED);
+        lMotor.set(Settings.CLIMBER_INTAKE_SPEED);
         Logger.Log("lMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void Rintake() {
-        rMotor.set(Settings.INTAKE_SPEED);
+        rMotor.set(Settings.CLIMBER_INTAKE_SPEED);
         Logger.Log("rMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void Louttake() {
-        lMotor.set(Settings.OUTTAKE_SPEED);
+        lMotor.set(Settings.CLIMBER_OUTTAKE_SPEED);
         Logger.Log("lMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void Routtake() {
-        rMotor.set(Settings.OUTTAKE_SPEED);
+        rMotor.set(Settings.CLIMBER_OUTTAKE_SPEED);
         Logger.Log("rMotor current: " + lMotor.getOutputCurrent());
     }
 

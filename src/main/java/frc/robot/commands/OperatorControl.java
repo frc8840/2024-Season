@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
@@ -16,7 +17,7 @@ public class OperatorControl extends Command {
 
     private Climber climber;
     private PickUpNote intake;
-    private ArmShooter outtake;
+    private ArmShooter shooter;
     private Arm arm;
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.WRIST, ArmPosition.AMPSHOOTING,
@@ -27,12 +28,16 @@ public class OperatorControl extends Command {
 
     private String lastButtonPressed = null;
 
+    // these are for the shooting action
+    long shooterStarted = -1;
+    long intakeStarted = -1;
+
     // Make sure the roller imported is the one from subsystems! Not from settings.
-    public OperatorControl(Arm arm, Climber climber, PickUpNote pIntake, ArmShooter outtake) {
+    public OperatorControl(Arm arm, Climber climber, PickUpNote pIntake, ArmShooter shooter) {
         addRequirements(climber);
         this.climber = climber;
         this.intake = pIntake;
-        this.outtake = outtake;
+        this.shooter = shooter;
         this.arm = arm;
 
         ps4controller = new PS4Controller(Settings.OPERATOR_CONTROLLER_PORT);
@@ -41,11 +46,29 @@ public class OperatorControl extends Command {
 
     @Override
     public void execute() {
-        // this function is calld by WPILIB 50 times per second
-
-        if (ps4controller.getTriangleButtonPressed()) {
-            arm.setArmPosition(ArmPosition.SHOULDER);
+        long millis = System.currentTimeMillis();
+        if (millis % 10 == 0) { // every 10th call
+            Logger.Log("shooterStarted=" + shooterStarted + " intakeStarted=" + intakeStarted);
         }
+
+        long now = System.currentTimeMillis();
+        if (shooterStarted + 2000 < now) {
+            // it has been 1000ms since shooter started
+            // stop this whole thing
+            shooterStarted = -1;
+            intakeStarted = -1;
+            shooter.stop();
+            intake.stop();
+        } else if (shooterStarted + 1000 < now && intakeStarted < 0) {
+            // it has been 500ms since shooter started and intake hasn't started yet
+            // start the intake
+            this.intake.intake();
+            intakeStarted = now;
+        }
+        // this function is calld by WPILIB 50 times per second
+        // if (ps4controller.getTriangleButtonPressed()) {
+        // //arm.setArmPosition(ArmPosition.SHOULDER);
+        // }
 
         // if (ps4controller.getL2ButtonPressed()) {
         // arm.setArmPosition(ArmPosition.ELBOW);
@@ -72,15 +95,16 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getCircleButton()) {
-            intake.pOuttake();
-        } else {
-            intake.pStop();
+            intake.intake();
+        } else if (ps4controller.getTouchpad()) {
+            intake.outtake();
+        } else if (intakeStarted < 0) {
+            // not in the middle of complex action
+            intake.stop();
         }
 
         if (ps4controller.getSquareButton()) {
-            outtake.sOuttake();
-        } else {
-            outtake.sStop();
+            shooter.outtake();
         }
 
         if (ps4controller.getShareButtonPressed()) {
@@ -89,6 +113,18 @@ public class OperatorControl extends Command {
 
         if (ps4controller.getOptionsButtonPressed()) {
             arm.gethard();
+            shooter.gethard();
+        }
+
+        // the idea here is to run the shooter fo 500ms
+        // to get it up to speed, then run the intake for 1000ms
+        // then top both of them
+        if (ps4controller.getTriangleButtonPressed()) {
+            shooter.outtake(); // start the shooter
+            shooterStarted = now;
+        } else if (shooterStarted < 0) {
+            // not in the middle of complex action
+            shooter.stop();
         }
 
         // if (ps4controller.getPOV() == 270) {
