@@ -15,6 +15,7 @@ import frc.robot.subsystems.NewSwerveModule;
 import frc.team_8840_lib.info.console.Logger;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Arm.ArmPosition;
+import frc.robot.Robot;
 
 public class DriverControl extends Command {
 

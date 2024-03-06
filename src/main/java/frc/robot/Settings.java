@@ -27,6 +27,11 @@ public class Settings {
     public static final PIDStruct ELBOW_PID = new PIDStruct(0.10, 0.0, 40.0);
     public static final PIDStruct WRIST_PID = new PIDStruct(0.10, 0.0, 40.0);
 
+    public static final PIDStruct FRONTLEFT_PID = new PIDStruct(0.10, 0.0, 40.0);
+    public static final PIDStruct FRONTRIGHT_PID = new PIDStruct(0.10, 0.0, 40.0);
+    public static final PIDStruct BACKLEFT_PID = new PIDStruct(0.10, 0.0, 40.0);
+    public static final PIDStruct BACKRIGHT_PID = new PIDStruct(0.10, 0.0, 40.0);
+
     public static final double MAX_SHOULDER_SPEED = 0.8;
     public static final double MAX_ELBOW_SPEED = 0.8;
     public static final double MAX_WRIST_SPEED = 0.8;

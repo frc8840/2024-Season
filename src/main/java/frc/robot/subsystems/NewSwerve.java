@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.team_8840_lib.info.console.Logger;
+import frc.robot.subsystems.Arm;
+import frc.robot.Settings;
 
 public class NewSwerve extends SubsystemBase {
     private final Pigeon2 gyro;
@@ -103,6 +105,17 @@ public class NewSwerve extends SubsystemBase {
                 ? Rotation2d.fromDegrees(360 - gyro.getAngle())
                 : Rotation2d.fromDegrees(gyro.getAngle());
     }
+
+    
+
+    public enum DrivePosition {
+        //add in PID commands later
+        MOVELEFT(),
+        MOVERIGHT(),
+        MOVEFORWARD(),
+        MOVEBACK();
+    }
+
 
     @Override
     public void periodic() {
