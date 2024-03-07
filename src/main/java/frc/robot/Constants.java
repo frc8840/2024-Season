@@ -41,10 +41,10 @@ public final class Constants {
                 // assuming coordinates from WPILIB from here:
                 // https://www.chiefdelphi.com/t/swerve-x-and-y-flipped-in-odometry/451670/2
                 public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-                                new Translation2d(wheelBase / 2.0, trackWidth / 2.0), // front left
                                 new Translation2d(wheelBase / 2.0, -trackWidth / 2.0), // front right
-                                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0), // back left
-                                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0) // back right
+                                new Translation2d(wheelBase / 2.0, trackWidth / 2.0), // front left
+                                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0), // back right
+                                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0) // back left
                 );
 
                 /* Swerve Voltage Compensation */
