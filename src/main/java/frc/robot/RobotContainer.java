@@ -77,7 +77,7 @@ public class RobotContainer {
 
     }
 
-    public Trajectory getFirstTrajectory() {
+    public Trajectory getBA2Trajectory() {
         return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
@@ -89,7 +89,7 @@ public class RobotContainer {
 
     }
 
-    public Trajectory getSecondTrajectory() {
+    public Trajectory getBA3Trajectory() {
         return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
@@ -101,7 +101,115 @@ public class RobotContainer {
 
     }
 
-    public Trajectory getThirdTrajectory() {
+    public Trajectory getBM2Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getBM3Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getBS2Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getS3Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getRA2Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getRA3Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getRM2Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getRM3Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getRS2Trajectory() {
+        return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                trajectoryConfig);
+
+    }
+
+    public Trajectory getR3Trajectory() {
         return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
