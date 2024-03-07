@@ -46,10 +46,6 @@ public class OperatorControl extends Command {
 
     @Override
     public void execute() {
-        long millis = System.currentTimeMillis();
-        if (millis % 10 == 0) { // every 10th call
-            Logger.Log("shooterStarted=" + shooterStarted + " intakeStarted=" + intakeStarted);
-        }
 
         long now = System.currentTimeMillis();
         if (shooterStarted + 2000 < now) {
@@ -67,12 +63,12 @@ public class OperatorControl extends Command {
         }
         // this function is calld by WPILIB 50 times per second
         // if (ps4controller.getTriangleButtonPressed()) {
-        // //arm.setArmPosition(ArmPosition.SHOULDER);
+        // arm.setArmPosition(ArmPosition.SHOULDER);
         // }
 
-        // if (ps4controller.getL2ButtonPressed()) {
-        // arm.setArmPosition(ArmPosition.ELBOW);
-        // }
+        if (ps4controller.getL2ButtonPressed()) {
+            arm.setArmPosition(ArmPosition.ELBOW);
+        }
 
         if (ps4controller.getL1ButtonPressed()) {
             arm.setArmPosition(ArmPosition.WRIST);

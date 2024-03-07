@@ -148,7 +148,7 @@ public class Arm extends SubsystemBase {
         SHOULDER(20, 0, 0),
         ELBOW(0, -80, 0),
         WRIST(0, 0, 117),
-        AMPSHOOTING(0, -80, 0),
+        AMPSHOOTING(0, -100, 120),
         SPEAKERSHOOTING(0, 0, 90),
         TRAPSHOOTING(0, 0, 0),
         INTAKEDEMO(0, 0, 117);

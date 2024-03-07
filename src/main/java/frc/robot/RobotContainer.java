@@ -81,9 +81,10 @@ public class RobotContainer {
         return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
-                        new Translation2d(1, 0),
-                        new Translation2d(1, 1)),
-                new Pose2d(2, 1, new Rotation2d(0)),
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
                 trajectoryConfig);
 
     }
@@ -92,9 +93,9 @@ public class RobotContainer {
     // https://www.chiefdelphi.com/t/0-to-autonomous-6-swerve-drive-auto/401117
     public Command getAutonomousCommand(Trajectory trajectory) {
         // create the PID controllers for feedback
-        PIDController xController = new PIDController(1.5, 0, 0);
-        PIDController yController = new PIDController(1.5, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0,
+        PIDController xController = new PIDController(0.2, 0, 0);
+        PIDController yController = new PIDController(0.2, 0, 0);
+        ProfiledPIDController thetaController = new ProfiledPIDController(0.2, 0, 0,
                 Constants.AutoConstants.kThetaControllerConstraints);
         ;
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
