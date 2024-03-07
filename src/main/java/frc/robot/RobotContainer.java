@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.NewSwerve;
@@ -77,8 +78,8 @@ public class RobotContainer {
 
     }
 
-    public Trajectory getBA2Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
+    public Command getA2BlueCommand() {
+        Trajectory t = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
                 // new Translation2d(2, 0)
@@ -86,144 +87,41 @@ public class RobotContainer {
                 ),
                 new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
                 trajectoryConfig);
-
+        return getAutonomousCommand(t);
     }
 
-    public Trajectory getBA3Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
+    public Command getDefaultCommand() {
+        Trajectory t1 = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
                 // new Translation2d(2, 0)
                 // new Translation2d(1, 1)
                 ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                new Pose2d(-2, 0, new Rotation2d(0)),
                 trajectoryConfig);
-
-    }
-
-    public Trajectory getBM2Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
+        Trajectory t2 = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(-2, 0, new Rotation2d(0)),
                 List.of(
                 // new Translation2d(2, 0)
                 // new Translation2d(1, 1)
                 ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getBM3Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
                 trajectoryConfig);
 
-    }
-
-    public Trajectory getBS2Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getS3Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getRA2Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getRA3Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getRM2Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getRM3Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getRS2Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
-
-    }
-
-    public Trajectory getR3Trajectory() {
-        return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
-                trajectoryConfig);
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+                getAutonomousCommand(t1), // go 2 meters forward
+                new InstantCommand(() -> intake.intake()), // run the intake
+                new WaitCommand(2),
+                new InstantCommand(() -> intake.stop()), // stop the intake
+                getAutonomousCommand(t2), // go 2 meters back again
+                new InstantCommand(() -> swerve.stopModules()));
 
     }
 
     // following the pattern set in this video:
     // https://www.chiefdelphi.com/t/0-to-autonomous-6-swerve-drive-auto/401117
-    public Command getAutonomousCommand(Trajectory trajectory) {
+    public SwerveControllerCommand getAutonomousCommand(Trajectory trajectory) {
         // create the PID controllers for feedback
         PIDController xController = new PIDController(0.2, 0, 0);
         PIDController yController = new PIDController(0.2, 0, 0);
@@ -231,7 +129,7 @@ public class RobotContainer {
                 Constants.AutoConstants.kThetaControllerConstraints);
         ;
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        return new SwerveControllerCommand(
                 trajectory,
                 swerve::getPose,
                 Constants.Swerve.swerveKinematics,
@@ -240,11 +138,6 @@ public class RobotContainer {
                 thetaController,
                 swerve::setModuleStates,
                 swerve);
-        // 5. Add some init and wrap-up, and return everything
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
-                swerveControllerCommand,
-                new InstantCommand(() -> swerve.stopModules()));
     }
 
 }
