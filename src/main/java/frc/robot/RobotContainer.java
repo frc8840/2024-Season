@@ -79,15 +79,32 @@ public class RobotContainer {
     }
 
     public Command getA2BlueCommand() {
-        Trajectory t = TrajectoryGenerator.generateTrajectory(
+        Trajectory t1 = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
                 // new Translation2d(2, 0)
                 // new Translation2d(1, 1)
                 ),
-                new Pose2d(2, 1, new Rotation2d(-Math.PI / 2)),
+                new Pose2d(1, 1, new Rotation2d(0)),
                 trajectoryConfig);
-        return getAutonomousCommand(t);
+        Trajectory t2 = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(1, 1, new Rotation2d(0)),
+                List.of(
+                // new Translation2d(2, 0)
+                // new Translation2d(1, 1)
+                ),
+                new Pose2d(0, 0, new Rotation2d(0)),
+                trajectoryConfig);
+
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+                getAutonomousCommand(t1), // go 2 meters forward
+                new InstantCommand(() -> intake.intake()), // run the intake
+                new WaitCommand(1),
+                new InstantCommand(() -> intake.stop()), // stop the intake
+                getAutonomousCommand(t2), // go 2 meters back again
+                new InstantCommand(() -> swerve.stopModules()));
+
     }
 
     public Command getDefaultCommand() {

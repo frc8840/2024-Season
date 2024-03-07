@@ -91,8 +91,6 @@ public class Robot extends TimedRobot {
     switch (s) {
       case "A2_BLUE":
         return container.getA2BlueCommand();
-      case "A3_BLUE":
-        return container.getA3BlueCommand();
       case "DEFAULT":
       default:
         return container.getDefaultCommand();
