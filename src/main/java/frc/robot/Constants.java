@@ -25,8 +25,9 @@ public final class Constants {
                 public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
                 /* Drivetrain Constants */
-                public static final double trackWidth = Units.inchesToMeters(21.73);
-                public static final double wheelBase = Units.inchesToMeters(21.73);
+                // our robot this year is longer than wide
+                public static final double trackWidth = Units.inchesToMeters(21.0); // width
+                public static final double wheelBase = Units.inchesToMeters(22.0); // length
                 public static final double wheelDiameter = Units.inchesToMeters(4.0);
                 public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -37,11 +38,14 @@ public final class Constants {
                 public static final double angleGearRatio = (21.4 / 1.0); // SDS website for MK4i says 150/7:1 (was
                                                                           // 12.8:1)
 
+                // assuming coordinates from WPILIB from here:
+                // https://www.chiefdelphi.com/t/swerve-x-and-y-flipped-in-odometry/451670/2
                 public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-                                new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-                                new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-                                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
-                                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0));
+                                new Translation2d(wheelBase / 2.0, trackWidth / 2.0), // front left
+                                new Translation2d(wheelBase / 2.0, -trackWidth / 2.0), // front right
+                                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0), // back left
+                                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0) // back right
+                );
 
                 /* Swerve Voltage Compensation */
                 public static final double voltageComp = 12.0;
@@ -109,7 +113,7 @@ public final class Constants {
                 public static final double kMaxSpeedMetersPerSecond = 3;
                 public static final double kMaxAccelerationMetersPerSecondSquared = 3;
                 public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-                public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+                public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
 
                 public static final double kPXController = 1;
                 public static final double kPYController = 1;
@@ -117,6 +121,6 @@ public final class Constants {
 
                 // // Constraint for the motion profilied robot angle controller
                 public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-                                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+                                kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
         }
 }

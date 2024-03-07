@@ -59,7 +59,7 @@ public class NewSwerveModule {
         lastAngle = getState().angle;
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+    public void setDesiredState(SwerveModuleState desiredState) {
         // Custom optimize command, since default WPILib optimize assumes continuous
         // controller which
         // REV and CTRE are not
@@ -67,7 +67,7 @@ public class NewSwerveModule {
         desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
 
         setAngle(desiredState);
-        setSpeed(desiredState, isOpenLoop);
+        setSpeed(desiredState, false);
     }
 
     private void resetToAbsolute() {

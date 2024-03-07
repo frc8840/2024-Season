@@ -52,7 +52,7 @@ public class DriverControl extends Command {
             double translationVal = translationLimiter.calculate(
                     MathUtil.applyDeadband(xboxcontroller.getLeftY(), Constants.Swerve.stickDeadband));
             double strafeVal = strafeLimiter.calculate(
-                    MathUtil.applyDeadband(-xboxcontroller.getLeftX(), Constants.Swerve.stickDeadband));
+                    MathUtil.applyDeadband(xboxcontroller.getLeftX(), Constants.Swerve.stickDeadband));
             double rotationVal = rotationLimiter.calculate(
                     MathUtil.applyDeadband(-xboxcontroller.getRightX(), Constants.Swerve.stickDeadband));
 
@@ -60,8 +60,7 @@ public class DriverControl extends Command {
             swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
                     rotationVal * Constants.Swerve.maxAngularVelocity,
-                    true,
-                    false);
+                    true);
         }
 
     }

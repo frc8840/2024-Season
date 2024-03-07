@@ -14,13 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.team_8840_lib.info.console.Logger;
-import frc.robot.subsystems.Arm;
-import frc.robot.Settings;
 
 public class NewSwerve extends SubsystemBase {
     private final Pigeon2 gyro;
 
-    private SwerveDriveOdometry swerveOdometry;
+    private SwerveDriveOdometry odometer;
     private NewSwerveModule[] mSwerveMods;
     private SwerveModulePosition[] startPositions;
 
@@ -36,7 +34,7 @@ public class NewSwerve extends SubsystemBase {
                 new SwerveModulePosition(),
                 new SwerveModulePosition(),
         };
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), startPositions);
+        odometer = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, new Rotation2d(0), startPositions);
 
         // order is always FRONT LEFT, FRONT RIGHT, BACK LEFT, BACK RIGHT
         mSwerveMods = new NewSwerveModule[] {
@@ -53,30 +51,30 @@ public class NewSwerve extends SubsystemBase {
 
     // translation and rotation are the desired behavior of the robot at this moment
     public void drive(
-            Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+            Translation2d translation, double rotation, boolean fieldRelative) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                 translation.getX(), translation.getY(), rotation, getYaw())
                         : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
-        setModuleStates(swerveModuleStates, isOpenLoop);
+        setModuleStates(swerveModuleStates);
     }
 
     /* Used by SwerveControllerCommand in Auto */
-    public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
 
         for (NewSwerveModule mod : mSwerveMods) {
-            mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);
+            mod.setDesiredState(desiredStates[mod.moduleNumber]);
         }
     }
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return odometer.getPoseMeters();
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), startPositions, pose);
+        odometer.resetPosition(getYaw(), getPositions(), pose);
     }
 
     public NewSwerveModule[] getModules() {
@@ -106,30 +104,27 @@ public class NewSwerve extends SubsystemBase {
                 : Rotation2d.fromDegrees(gyro.getAngle());
     }
 
-    
-
     public enum DrivePosition {
-        //add in PID commands later
+        // add in PID commands later
         MOVELEFT(),
         MOVERIGHT(),
         MOVEFORWARD(),
         MOVEBACK();
     }
 
-
     @Override
     public void periodic() {
-        swerveOdometry.update(getYaw(), getPositions());
+        odometer.update(getYaw(), getPositions());
         field.setRobotPose(getPose());
 
         for (NewSwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber(
                     "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoderAngle().getDegrees());
-            SmartDashboard.putNumber(
-                    "Mod " + mod.moduleNumber + " Integrated",
-                    mod.getState().angle.getDegrees());
-            SmartDashboard.putNumber(
-                    "Mod " + mod.moduleNumber + " Velocity", mod.getPosition().distanceMeters);
         }
+        // tell dashboard where the robot thinks it is
+        SmartDashboard.putNumber(
+                "Robot heading:", gyro.getAngle());
+        SmartDashboard.putString(
+                "Robot location:", getPose().getTranslation().toString());
     }
 }
