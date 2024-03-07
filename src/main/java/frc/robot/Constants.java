@@ -26,8 +26,8 @@ public final class Constants {
 
                 /* Drivetrain Constants */
                 // our robot this year is longer than wide
-                public static final double trackWidth = Units.inchesToMeters(21.0); // width
-                public static final double wheelBase = Units.inchesToMeters(22.0); // length
+                public static final double trackWidth = Units.inchesToMeters(22.75); // width 22.75
+                public static final double wheelBase = Units.inchesToMeters(24.75); // length 24.75
                 public static final double wheelDiameter = Units.inchesToMeters(4.0);
                 public static final double wheelCircumference = wheelDiameter * Math.PI;
 
