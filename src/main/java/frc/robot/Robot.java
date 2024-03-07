@@ -5,8 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.config.CTREConfigs;
 
@@ -21,11 +20,9 @@ import frc.lib.config.CTREConfigs;
  */
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
 
-  private boolean m_autoSelected = false;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private Command autonomousCommand;
+
   RobotContainer container;
 
   /**
@@ -78,15 +75,18 @@ public class Robot extends TimedRobot {
     // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
-    m_autoSelected = true;
+    autonomousCommand = container.getAutonomousCommand(container.getTestTrajectory());
+
+    // schedule the autonomous command - adds it to the scheduler
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
+    }
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    if (m_autoSelected = true) {
-        // Put default auto code here
-    }
   }
 
   /** This function is called once when teleop is enabled. */

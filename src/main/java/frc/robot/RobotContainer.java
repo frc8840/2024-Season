@@ -14,6 +14,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
@@ -31,6 +33,13 @@ public class RobotContainer {
     private NewSwerve swerve;
     private PickUpNote intake;
     private ArmShooter outtake;
+
+    // controllers
+    DriverControl driverControl;
+    OperatorControl operatorControl;
+
+    // for autonomous
+    TrajectoryConfig trajectoryConfig;
 
     public static RobotContainer getInstance() {
         return instance;
@@ -54,27 +63,34 @@ public class RobotContainer {
         }
         Logger.Log("finished sleeping");
 
-        // now make the controls
-        DriverControl driverControl = new DriverControl(swerve, arm);
+        // now make the controllers
+        driverControl = new DriverControl(swerve, arm);
         swerve.setDefaultCommand(driverControl);
 
-        OperatorControl operatorControl = new OperatorControl(arm, climber, intake, outtake);
+        operatorControl = new OperatorControl(arm, climber, intake, outtake);
         climber.setDefaultCommand(operatorControl);
-    }
 
-    // following the pattern set in this video:
-    // https://www.chiefdelphi.com/t/0-to-autonomous-6-swerve-drive-auto/401117
-    public Command getAutonomousCommand() {
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+        // now make the trajectory config for auto
+        trajectoryConfig = new TrajectoryConfig(Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                 Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+
+    }
+
+    public Trajectory getTestTrajectory() {
+        return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
                         new Translation2d(1, 0),
                         new Translation2d(1, 1)),
                 new Pose2d(2, 1, new Rotation2d(0)),
                 trajectoryConfig);
+
+    }
+
+    // following the pattern set in this video:
+    // https://www.chiefdelphi.com/t/0-to-autonomous-6-swerve-drive-auto/401117
+    public Command getAutonomousCommand(Trajectory trajectory) {
         // create the PID controllers for feedback
         PIDController xController = new PIDController(1.5, 0, 0);
         PIDController yController = new PIDController(1.5, 0, 0);
@@ -91,7 +107,11 @@ public class RobotContainer {
                 thetaController,
                 swerve::setModuleStates,
                 swerve);
-        return null;
+        // 5. Add some init and wrap-up, and return everything
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
+                swerveControllerCommand,
+                new InstantCommand(() -> swerve.stopModules()));
     }
 
 }

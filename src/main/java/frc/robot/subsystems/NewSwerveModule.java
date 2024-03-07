@@ -162,4 +162,10 @@ public class NewSwerveModule {
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     }
+
+    public void stop() {
+        driveMotor.set(0);
+        angleMotor.set(0);
+    }
+
 }

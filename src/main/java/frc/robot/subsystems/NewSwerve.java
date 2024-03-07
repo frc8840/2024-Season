@@ -127,4 +127,10 @@ public class NewSwerve extends SubsystemBase {
         SmartDashboard.putString(
                 "Robot location:", getPose().getTranslation().toString());
     }
+
+    public void stopModules() {
+        for (NewSwerveModule mod : mSwerveMods) {
+            mod.stop();
+        }
+    }
 }
