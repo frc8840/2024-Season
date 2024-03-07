@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
     // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
-    autonomousCommand = container.getAutonomousCommand(container.getTestTrajectory());
+    autonomousCommand = container.getAutonomousCommand(container.getFirstTrajectory());
 
     // schedule the autonomous command - adds it to the scheduler
     if (autonomousCommand != null) {
