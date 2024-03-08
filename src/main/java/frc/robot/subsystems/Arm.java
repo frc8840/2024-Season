@@ -101,7 +101,7 @@ public class Arm extends SubsystemBase {
     public void setArmPosition(ArmPosition position) {
         this.position = position;
 
-        Logger.Log("shoulder position before:" + shoulderEncoder.getPosition());
+        // Logger.Log("shoulder position before:" + shoulderEncoder.getPosition());
         shoulderPID.setReference(
                 position.shoulderAngle,
                 ControlType.kPosition,

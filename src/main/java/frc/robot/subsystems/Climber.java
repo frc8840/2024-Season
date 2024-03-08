@@ -105,28 +105,28 @@ public class Climber extends SubsystemBase {
         // Update the settings
         lMotor.burnFlash();
         rMotor.burnFlash();
-        Logger.Log("L position: " + lEncoder.getPosition());
-        Logger.Log("R position: " + rEncoder.getPosition());
+        // Logger.Log("L position: " + lEncoder.getPosition());
+        // Logger.Log("R position: " + rEncoder.getPosition());
     }
 
     public void Lintake() {
         lMotor.set(Settings.CLIMBER_INTAKE_SPEED);
-        Logger.Log("lMotor current: " + lMotor.getOutputCurrent());
+        // Logger.Log("lMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void Rintake() {
         rMotor.set(Settings.CLIMBER_INTAKE_SPEED);
-        Logger.Log("rMotor current: " + lMotor.getOutputCurrent());
+        // Logger.Log("rMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void Louttake() {
         lMotor.set(Settings.CLIMBER_OUTTAKE_SPEED);
-        Logger.Log("lMotor current: " + lMotor.getOutputCurrent());
+        // Logger.Log("lMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void Routtake() {
         rMotor.set(Settings.CLIMBER_OUTTAKE_SPEED);
-        Logger.Log("rMotor current: " + lMotor.getOutputCurrent());
+        // Logger.Log("rMotor current: " + lMotor.getOutputCurrent());
     }
 
     public void leftStop() {

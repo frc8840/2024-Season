@@ -80,10 +80,10 @@ public class OperatorControl extends Command {
 
         if (ps4controller.getR2ButtonPressed()) {
             climber.climb();
-            Logger.Log("climbing now");
+            // Logger.Log("climbing now");
         } else if (ps4controller.getR1ButtonPressed()) {
             climber.drop();
-            Logger.Log("dropping now");
+            // Logger.Log("dropping now");
         }
 
         if (ps4controller.getCircleButton()) {

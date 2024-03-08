@@ -71,17 +71,22 @@ public class NewSwerveModule {
     }
 
     private void resetToAbsolute() {
-        Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + " position: "
-                + integratedAngleEncoder.getPosition());
-        Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + " conversion factor: "
-                + integratedAngleEncoder.getPositionConversionFactor());
+        // Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + "
+        // position: "
+        // + integratedAngleEncoder.getPosition());
+        // Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + "
+        // conversion factor: "
+        // + integratedAngleEncoder.getPositionConversionFactor());
         double canAngleDegrees = getCanCoderAngle().getDegrees();
-        Logger.Log("raw canAngleDegrees for " + angleEncoder.getDeviceID() + ": " + canAngleDegrees);
+        // Logger.Log("raw canAngleDegrees for " + angleEncoder.getDeviceID() + ": " +
+        // canAngleDegrees);
         double absolutePosition = canAngleDegrees - angleOffset.getDegrees();
-        Logger.Log("fixed canAngleDegrees for " + angleEncoder.getDeviceID() + ": " + absolutePosition);
+        // Logger.Log("fixed canAngleDegrees for " + angleEncoder.getDeviceID() + ": " +
+        // absolutePosition);
         integratedAngleEncoder.setPosition(absolutePosition);
-        Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + " position (after): "
-                + integratedAngleEncoder.getPosition());
+        // Logger.Log("integratedAngleEncoder for " + angleEncoder.getDeviceID() + "
+        // position (after): "
+        // + integratedAngleEncoder.getPosition());
 
     }
 
@@ -141,7 +146,8 @@ public class NewSwerveModule {
         if (Math.abs(desiredState.angle.getDegrees() - lastAngle.getDegrees()) <= 1.0)
             return;
 
-        Logger.Log("desiredAngle: " + desiredState.angle.getDegrees() + " currentAngle: " + getAngle().getDegrees());
+        // Logger.Log("desiredAngle: " + desiredState.angle.getDegrees() + "
+        // currentAngle: " + getAngle().getDegrees());
 
         angleController.setReference(desiredState.angle.getDegrees(), CANSparkMax.ControlType.kPosition);
         lastAngle = desiredState.angle;

@@ -46,7 +46,7 @@ public class NewSwerve extends SubsystemBase {
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
-        Logger.Log("mSwerveMods.length=" + mSwerveMods.length);
+        // Logger.Log("mSwerveMods.length=" + mSwerveMods.length);
     }
 
     // translation and rotation are the desired behavior of the robot at this moment
@@ -83,7 +83,7 @@ public class NewSwerve extends SubsystemBase {
 
     public SwerveModulePosition[] getPositions() {
         if (mSwerveMods == null || mSwerveMods.length != 4) {
-            Logger.Log("mSwerveMods = null");
+            // Logger.Log("mSwerveMods = null");
             return null;
         }
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -94,7 +94,7 @@ public class NewSwerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
-        Logger.Log("zeroGyro called");
+        // Logger.Log("zeroGyro called");
         gyro.setYaw(0);
     }
 
