@@ -1,18 +1,13 @@
 package frc.robot;
 
 import java.util.List;
-
-import javax.sql.rowset.serial.SerialArray;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -24,6 +19,7 @@ import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.PickUpNote;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Arm.ArmPosition;
 import frc.robot.subsystems.ArmShooter;
 import frc.team_8840_lib.info.console.Logger;
 
@@ -33,7 +29,7 @@ public class RobotContainer {
     private Climber climber;
     private NewSwerve swerve;
     private PickUpNote intake;
-    private ArmShooter outtake;
+    private ArmShooter shooter;
 
     // controllers
     DriverControl driverControl;
@@ -54,7 +50,7 @@ public class RobotContainer {
         arm = new Arm();
         climber = new Climber();
         intake = new PickUpNote();
-        outtake = new ArmShooter();
+        shooter = new ArmShooter();
 
         Logger.Log("finished constructing subsystems, going to sleep");
         try {
@@ -68,7 +64,7 @@ public class RobotContainer {
         driverControl = new DriverControl(swerve, arm);
         swerve.setDefaultCommand(driverControl);
 
-        operatorControl = new OperatorControl(arm, climber, intake, outtake);
+        operatorControl = new OperatorControl(arm, climber, intake, shooter);
         climber.setDefaultCommand(operatorControl);
 
         // now make the trajectory config for auto
@@ -99,6 +95,7 @@ public class RobotContainer {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
                 getAutonomousCommand(t1), // go 2 meters forward
+                new InstantCommand(() -> swerve.stopModules()),
                 new InstantCommand(() -> intake.intake()), // run the intake
                 new WaitCommand(1),
                 new InstantCommand(() -> intake.stop()), // stop the intake
@@ -107,31 +104,29 @@ public class RobotContainer {
 
     }
 
-    public Command getDefaultCommand() {
-        Trajectory t1 = TrajectoryGenerator.generateTrajectory(
+    public Command shootAndDriveForwardCommand() {
+        Trajectory t = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
-                // new Translation2d(2, 0)
+                // new Translation2d(-1, 0)
                 // new Translation2d(1, 1)
                 ),
-                new Pose2d(-2, 0, new Rotation2d(0)),
+                new Pose2d(2, 0, new Rotation2d(0)),
                 trajectoryConfig);
-        Trajectory t2 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(-2, 0, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(0, 0, new Rotation2d(0)),
-                trajectoryConfig);
-
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-                getAutonomousCommand(t1), // go 2 meters forward
-                new InstantCommand(() -> intake.intake()), // run the intake
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
+                new InstantCommand(() -> shooter.outtake()),
                 new WaitCommand(2),
-                new InstantCommand(() -> intake.stop()), // stop the intake
-                getAutonomousCommand(t2), // go 2 meters back again
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+                new InstantCommand(() -> {
+                    intake.stop();
+                    shooter.stop();
+                }),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
+                new WaitCommand(2),
+                getAutonomousCommand(t),
                 new InstantCommand(() -> swerve.stopModules()));
 
     }

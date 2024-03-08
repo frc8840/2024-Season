@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
         return container.getA2BlueCommand();
       case "DEFAULT":
       default:
-        return container.getDefaultCommand();
+        return container.shootAndDriveForwardCommand();
     }
   }
 

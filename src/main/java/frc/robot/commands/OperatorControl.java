@@ -27,15 +27,6 @@ public class OperatorControl extends Command {
 
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.WRIST, ArmPosition.AMPSHOOTING,
             ArmPosition.SPEAKERSHOOTING };
-    private int selectedPosition = 0; // The selected index of the height order, changed through the arrow keys on the
-                                      // PS4 controller.
-    private boolean armInPosition = false;
-
-    private String lastButtonPressed = null;
-
-    // these are for the shooting action
-    long shooterStarted = -1;
-    long intakeStarted = -1;
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
     public OperatorControl(Arm arm, Climber climber, PickUpNote pIntake, ArmShooter shooter) {
@@ -84,7 +75,7 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getPSButtonPressed()) {
-            arm.setArmPosition(ArmPosition.AMPSHOOTING);
+            arm.setArmPosition(ArmPosition.SPEAKERSHOOTING);
         }
 
         if (ps4controller.getR2ButtonPressed()) {
@@ -99,13 +90,9 @@ public class OperatorControl extends Command {
             intake.intake();
         } else if (ps4controller.getTouchpad()) {
             intake.outtake();
-        } else if (intakeStarted < 0) {
+        } else if (System.currentTimeMillis() > shooter.shooterStarted + 5000) {
             // not in the middle of complex action
             intake.stop();
-        }
-
-        if (ps4controller.getSquareButton()) {
-            shooter.outtake();
         }
 
         if (ps4controller.getShareButtonPressed()) {
@@ -125,7 +112,7 @@ public class OperatorControl extends Command {
             // shooterStarted = now;
             Command c = new SequentialCommandGroup(
                     new InstantCommand(() -> shooter.outtake()), // run the shooter
-                    new WaitCommand(1),
+                    new WaitCommand(2),
                     new InstantCommand(() -> intake.intake()), // run the intake
                     new WaitCommand(1),
                     new InstantCommand(() -> {
@@ -133,7 +120,6 @@ public class OperatorControl extends Command {
                         intake.stop();
                     })); // stop them both
             c.schedule(); // make it happen!
-
         }
         // else if (shooterStarted < 0) {
         // // not in the middle of complex action
