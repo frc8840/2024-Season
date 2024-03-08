@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
     switch (s) {
       case "A2_BLUE":
         return container.getA2BlueCommand();
-      case "DEFAULT":
+      case "A3_BLUE":
       default:
         return container.shootAndDriveForwardCommand();
     }

@@ -78,28 +78,30 @@ public class RobotContainer {
         Trajectory t1 = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(
-                // new Translation2d(2, 0)
+                // new Translation2d(-1, 0)
                 // new Translation2d(1, 1)
                 ),
-                new Pose2d(1, 1, new Rotation2d(0)),
+                new Pose2d(2, 0, new Rotation2d(0)),
                 trajectoryConfig);
-        Trajectory t2 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(1, 1, new Rotation2d(0)),
-                List.of(
-                // new Translation2d(2, 0)
-                // new Translation2d(1, 1)
-                ),
-                new Pose2d(0, 0, new Rotation2d(0)),
-                trajectoryConfig);
-
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-                getAutonomousCommand(t1), // go 2 meters forward
-                new InstantCommand(() -> swerve.stopModules()),
-                new InstantCommand(() -> intake.intake()), // run the intake
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
+                new InstantCommand(() -> shooter.outtake()),
+                new WaitCommand(2),
+                new InstantCommand(() -> intake.intake()),
                 new WaitCommand(1),
-                new InstantCommand(() -> intake.stop()), // stop the intake
-                getAutonomousCommand(t2), // go 2 meters back again
+                new InstantCommand(() -> {
+                    intake.stop();
+                    shooter.stop();
+                }),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
+                new WaitCommand(2),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
+                new WaitCommand(1),
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(0.5),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
+                getAutonomousCommand(t1),
                 new InstantCommand(() -> swerve.stopModules()));
 
     }
