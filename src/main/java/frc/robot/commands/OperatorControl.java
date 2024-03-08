@@ -1,8 +1,13 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -47,20 +52,20 @@ public class OperatorControl extends Command {
     @Override
     public void execute() {
 
-        long now = System.currentTimeMillis();
-        if (shooterStarted + 2000 < now) {
-            // it has been 1000ms since shooter started
-            // stop this whole thing
-            shooterStarted = -1;
-            intakeStarted = -1;
-            shooter.stop();
-            intake.stop();
-        } else if (shooterStarted + 1000 < now && intakeStarted < 0) {
-            // it has been 500ms since shooter started and intake hasn't started yet
-            // start the intake
-            this.intake.intake();
-            intakeStarted = now;
-        }
+        // long now = System.currentTimeMillis();
+        // if (shooterStarted + 2000 < now) {
+        // // it has been 1000ms since shooter started
+        // // stop this whole thing
+        // shooterStarted = -1;
+        // intakeStarted = -1;
+        // shooter.stop();
+        // intake.stop();
+        // } else if (shooterStarted + 1000 < now && intakeStarted < 0) {
+        // // it has been 500ms since shooter started and intake hasn't started yet
+        // // start the intake
+        // this.intake.intake();
+        // intakeStarted = now;
+        // }
         // this function is calld by WPILIB 50 times per second
         // if (ps4controller.getTriangleButtonPressed()) {
         // arm.setArmPosition(ArmPosition.SHOULDER);
@@ -116,12 +121,24 @@ public class OperatorControl extends Command {
         // to get it up to speed, then run the intake for 1000ms
         // then top both of them
         if (ps4controller.getTriangleButtonPressed()) {
-            shooter.outtake(); // start the shooter
-            shooterStarted = now;
-        } else if (shooterStarted < 0) {
-            // not in the middle of complex action
-            shooter.stop();
+            // shooter.outtake(); // start the shooter
+            // shooterStarted = now;
+            Command c = new SequentialCommandGroup(
+                    new InstantCommand(() -> shooter.outtake()), // run the shooter
+                    new WaitCommand(1),
+                    new InstantCommand(() -> intake.intake()), // run the intake
+                    new WaitCommand(1),
+                    new InstantCommand(() -> {
+                        shooter.stop();
+                        intake.stop();
+                    })); // stop them both
+            c.schedule(); // make it happen!
+
         }
+        // else if (shooterStarted < 0) {
+        // // not in the middle of complex action
+        // shooter.stop();
+        // }
 
         // if (ps4controller.getPOV() == 270) {
         // selectedPosition--;
