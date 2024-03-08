@@ -12,9 +12,6 @@ public class ArmShooter extends SubsystemBase {
     public CANSparkMax leftMotor;
     public CANSparkMax rightMotor;
 
-    // these are to know when the shooting action started
-    public long shooterStarted = -1;
-
     public ArmShooter() {
 
         leftMotor = new CANSparkMax(Settings.SHOOTER_MOTOR_ID, MotorType.kBrushless);
@@ -42,16 +39,14 @@ public class ArmShooter extends SubsystemBase {
         rightMotor.burnFlash();
     }
 
-    public void outtake() {
+    public void shoot() {
         leftMotor.set(Settings.SHOOTER_OUT_SPEED);
         rightMotor.set(-Settings.SHOOTER_OUT_SPEED);
-        shooterStarted = System.currentTimeMillis();
     }
 
     public void stop() {
         leftMotor.set(0);
         rightMotor.set(0);
-        shooterStarted = -1;
     }
 
     public void gethard() {

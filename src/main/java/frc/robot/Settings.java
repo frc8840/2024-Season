@@ -40,9 +40,8 @@ public class Settings {
 
     // INTAKE SETTINGS
     public static final int INTAKE_MOTOR_ID = 50;
-    public static final double PICKUP_OUTTAKE_SPEED = -1.0;
+    public static final double PICKUP_OUTTAKE_SPEED = -0.5;
     public static final double PICKUP_INTAKE_SPEED = 1.0;
-
     // SHOOTER SETTINGS
     public static final int SHOOTER_MOTOR_ID = 51;
     public static final int SHOOTER_MOTOR_ID2 = 52;

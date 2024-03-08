@@ -11,6 +11,7 @@ import frc.team_8840_lib.info.console.Logger;
 public class PickUpNote extends SubsystemBase {
 
     private CANSparkMax iMotor;
+    public boolean inComplexAction = false;
 
     public PickUpNote() {
 
@@ -42,6 +43,7 @@ public class PickUpNote extends SubsystemBase {
 
     public void stop() {
         iMotor.set(0);
+        inComplexAction = false;
     }
 
 }

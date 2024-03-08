@@ -43,54 +43,35 @@ public class OperatorControl extends Command {
     @Override
     public void execute() {
 
-        // long now = System.currentTimeMillis();
-        // if (shooterStarted + 2000 < now) {
-        // // it has been 1000ms since shooter started
-        // // stop this whole thing
-        // shooterStarted = -1;
-        // intakeStarted = -1;
-        // shooter.stop();
-        // intake.stop();
-        // } else if (shooterStarted + 1000 < now && intakeStarted < 0) {
-        // // it has been 500ms since shooter started and intake hasn't started yet
-        // // start the intake
-        // this.intake.intake();
-        // intakeStarted = now;
-        // }
-        // this function is calld by WPILIB 50 times per second
-        // if (ps4controller.getTriangleButtonPressed()) {
-        // arm.setArmPosition(ArmPosition.SHOULDER);
-        // }
-
-        if (ps4controller.getL2ButtonPressed()) {
-            arm.setArmPosition(ArmPosition.ELBOW);
+        if (ps4controller.getTriangleButton()) {
+            arm.setArmPosition(ArmPosition.AMPSHOOTING);
         }
 
         if (ps4controller.getL1ButtonPressed()) {
             arm.setArmPosition(ArmPosition.WRIST);
         }
 
-        if (ps4controller.getCrossButtonPressed()) {
+        if (ps4controller.getR1ButtonPressed()) {
             arm.setArmPosition(ArmPosition.REST);
         }
 
-        if (ps4controller.getPSButtonPressed()) {
+        if (ps4controller.getSquareButtonPressed()) {
             arm.setArmPosition(ArmPosition.SPEAKERSHOOTING);
         }
 
-        if (ps4controller.getR2ButtonPressed()) {
+        if (ps4controller.getCrossButtonPressed()) {
             climber.climb();
             // Logger.Log("climbing now");
-        } else if (ps4controller.getR1ButtonPressed()) {
+        } else if (ps4controller.getCircleButtonPressed()) {
             climber.drop();
             // Logger.Log("dropping now");
         }
 
-        if (ps4controller.getCircleButton()) {
+        if (ps4controller.getR2Button()) {
             intake.intake();
-        } else if (ps4controller.getTouchpad()) {
+        } else if (ps4controller.getL2Button()) {
             intake.outtake();
-        } else if (System.currentTimeMillis() > shooter.shooterStarted + 5000) {
+        } else if (!intake.inComplexAction) {
             // not in the middle of complex action
             intake.stop();
         }
@@ -107,11 +88,10 @@ public class OperatorControl extends Command {
         // the idea here is to run the shooter fo 500ms
         // to get it up to speed, then run the intake for 1000ms
         // then top both of them
-        if (ps4controller.getTriangleButtonPressed()) {
-            // shooter.outtake(); // start the shooter
-            // shooterStarted = now;
+        if (ps4controller.getTouchpadPressed()) {
+            intake.inComplexAction = true;
             Command c = new SequentialCommandGroup(
-                    new InstantCommand(() -> shooter.outtake()), // run the shooter
+                    new InstantCommand(() -> shooter.shoot()), // run the shooter
                     new WaitCommand(2),
                     new InstantCommand(() -> intake.intake()), // run the intake
                     new WaitCommand(1),
@@ -121,43 +101,6 @@ public class OperatorControl extends Command {
                     })); // stop them both
             c.schedule(); // make it happen!
         }
-        // else if (shooterStarted < 0) {
-        // // not in the middle of complex action
-        // shooter.stop();
-        // }
-
-        // if (ps4controller.getPOV() == 270) {
-        // selectedPosition--;
-        // if (selectedPosition < 0) {
-        // selectedPosition = heightOrder.length - 1;
-        // }
-        // } else if (ps4controller.getPOV() == 90) {
-        // selectedPosition++;
-        // if (selectedPosition >= heightOrder.length) {
-        // selectedPosition = 0;
-        // }
-        // }
-
-        /*
-         * if (ps4controller.getCircleButtonReleased()) {
-         * armInPosition = !armInPosition;
-         * 
-         * if (armInPosition) {
-         * arm.setArmPosition(heightOrder[selectedPosition]);
-         * } else {
-         * arm.setArmPosition(ArmPosition.REST);
-         * }
-         * } else if (ps4controller.getCrossButtonReleased() && !armInPosition) {
-         * arm.setArmPosition(ArmPosition.DOUBLE_SUBSTATION_INTAKE);
-         * 
-         * armInPosition = true;
-         * }
-         * 
-         * arm.reportToNetworkTables();
-         * 
-         * SmartDashboard.putString("Selected Position",
-         * heightOrder[selectedPosition].name());
-         */
     }
 
 }
