@@ -147,6 +147,11 @@ public class RobotContainer {
                 List.of(),
                 pose, // the trajectory generator seems to think we have to go bakcwards
                 trajectoryConfig);
+        Trajectory rollBackward2Meters = TrajectoryGenerator.generateTrajectory(
+                pose,
+                List.of(),
+                new Pose2d(0, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
+                trajectoryConfig);
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
@@ -159,8 +164,22 @@ public class RobotContainer {
                     shooter.stop();
                 }),
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
-                new WaitCommand(2),
                 getAutonomousCommand(rollForward2Meters),
+                new WaitCommand(2),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+                getAutonomousCommand(rollBackward2Meters),
+                new WaitCommand(2),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
+                new InstantCommand(() -> shooter.shoot()),
+                new WaitCommand(2),
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+                new InstantCommand(() -> {
+                    intake.stop();
+                    shooter.stop();
+                }),
                 new InstantCommand(() -> swerve.stopModules()));
 
     }

@@ -23,9 +23,9 @@ public class DriverControl extends Command {
     private NewSwerve swerve;
     private Arm arm;
 
-    private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
-    private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
-    private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
+    private SlewRateLimiter translationLimiter = new SlewRateLimiter(1.0);
+    private SlewRateLimiter strafeLimiter = new SlewRateLimiter(1.0);
+    private SlewRateLimiter rotationLimiter = new SlewRateLimiter(0.5);
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
     public DriverControl(NewSwerve swerve, Arm arm) {

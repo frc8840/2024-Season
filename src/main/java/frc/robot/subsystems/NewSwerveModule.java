@@ -67,7 +67,7 @@ public class NewSwerveModule {
         desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
 
         setAngle(desiredState);
-        setSpeed(desiredState, false);
+        setSpeed(desiredState, true); // let's try open loop control for now
     }
 
     private void resetToAbsolute() {

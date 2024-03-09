@@ -77,7 +77,7 @@ public final class Constants {
                 public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
                 /* Swerve Profiling Values */
-                public static final double maxSpeed = 4.0; // meters per second
+                public static final double maxSpeed = 2.0; // meters per second
                 public static final double maxAngularVelocity = 11.5;
 
                 /* Neutral Modes */
