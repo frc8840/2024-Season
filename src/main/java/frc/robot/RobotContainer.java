@@ -132,7 +132,7 @@ public class RobotContainer {
 
     public Command shootAndDriveCommand(SimpleDirection direction) {
         // get the pose for the direction
-        Pose2d pose = new Pose2d(-2, 0, new Rotation2d(0)); // straight
+        Pose2d pose = new Pose2d(-0.8636, 0, new Rotation2d(0)); // straight
         if (direction == SimpleDirection.diagonalLeft) {
             pose = new Pose2d(-1.4, 1.4, new Rotation2d(0));
         } else if (direction == SimpleDirection.diagonalRight) {
@@ -147,11 +147,6 @@ public class RobotContainer {
                 List.of(),
                 pose, // the trajectory generator seems to think we have to go bakcwards
                 trajectoryConfig);
-        Trajectory rollBackward2Meters = TrajectoryGenerator.generateTrajectory(
-                pose,
-                List.of(),
-                new Pose2d(0, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
-                trajectoryConfig);
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
@@ -165,12 +160,37 @@ public class RobotContainer {
                 }),
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
                 getAutonomousCommand(rollForward2Meters),
-                new WaitCommand(2),
-                new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
-                new InstantCommand(() -> intake.intake()),
-                new WaitCommand(1),
-                getAutonomousCommand(rollBackward2Meters),
-                new WaitCommand(2),
+                new InstantCommand(() -> swerve.stopModules()));
+
+    }
+
+    public Command shootAndDriveAndShootAgainCommand(SimpleDirection direction) {
+        // get the pose for the direction
+        Pose2d pose = new Pose2d(-0.254, 1.524, new Rotation2d(0)); // straight
+        if (direction == SimpleDirection.diagonalLeft) {
+            pose = new Pose2d(-1.4, 1.4, new Rotation2d(0));
+        } else if (direction == SimpleDirection.diagonalRight) {
+            pose = new Pose2d(-1.4, -1.4, new Rotation2d(0));
+        }
+
+        intake.inComplexAction = true;
+        // before we make our trajectory, let it know that we should go in reverse
+        trajectoryConfig.setReversed(true);
+        Trajectory rollForward2Meters = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(),
+                pose, // the trajectory generator seems to think we have to go bakcwards
+                trajectoryConfig);
+        trajectoryConfig.setReversed(false);
+        Trajectory rollBackward2Meters = TrajectoryGenerator.generateTrajectory(
+                pose,
+                List.of(),
+                new Pose2d(0, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
+                trajectoryConfig);
+        return new SequentialCommandGroup(
+                // reset odometry
+                new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+                // shoot the preloaded note
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
                 new InstantCommand(() -> shooter.shoot()),
                 new WaitCommand(2),
@@ -180,6 +200,29 @@ public class RobotContainer {
                     intake.stop();
                     shooter.stop();
                 }),
+                // roll forward
+                getAutonomousCommand(rollForward2Meters),
+                // intake note
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+                new InstantCommand(() -> {
+                    intake.stop();
+                }),
+                // roll backward
+                getAutonomousCommand(rollBackward2Meters),
+                // shoot
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
+                new InstantCommand(() -> shooter.shoot()),
+                new WaitCommand(2),
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+                new InstantCommand(() -> {
+                    intake.stop();
+                    shooter.stop();
+                }),
+                // move arm to rest and stop
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
                 new InstantCommand(() -> swerve.stopModules()));
 
     }

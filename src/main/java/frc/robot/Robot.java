@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("SHOOT_AND_STRAIGHT", "SHOOT_AND_STRAIGHT");
     m_chooser.addOption("SHOOT_AND_LEFT", "SHOOT_AND_LEFT");
     m_chooser.addOption("SHOOT_AND_RIGHT", "SHOOT_AND_RIGHT");
+    m_chooser.addOption("SHOOT_TWICE", "SHOOT_TWICE");
     SmartDashboard.putData("Autonomous selection", m_chooser);
     ctreConfigs = new CTREConfigs();
     container = new RobotContainer();
@@ -98,6 +99,8 @@ public class Robot extends TimedRobot {
         return container.shootAndDriveCommand(SimpleDirection.diagonalLeft);
       case "SHOOT_AND_RIGHT":
         return container.shootAndDriveCommand(SimpleDirection.diagonalRight);
+      case "SHOOT_TWICE":
+        return container.shootAndDriveAndShootAgainCommand(SimpleDirection.straight);
       default:
         return container.shootAndDriveCommand(SimpleDirection.straight);
     }
