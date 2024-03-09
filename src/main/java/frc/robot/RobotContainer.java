@@ -176,13 +176,13 @@ public class RobotContainer {
         intake.inComplexAction = true;
         // before we make our trajectory, let it know that we should go in reverse
         trajectoryConfig.setReversed(true);
-        Trajectory rollForward2Meters = TrajectoryGenerator.generateTrajectory(
+        Trajectory rollForwardMeters = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(),
                 pose, // the trajectory generator seems to think we have to go bakcwards
                 trajectoryConfig);
         trajectoryConfig.setReversed(false);
-        Trajectory rollBackward2Meters = TrajectoryGenerator.generateTrajectory(
+        Trajectory rollBackwardMeters = TrajectoryGenerator.generateTrajectory(
                 pose,
                 List.of(),
                 new Pose2d(0, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
@@ -200,17 +200,17 @@ public class RobotContainer {
                     intake.stop();
                     shooter.stop();
                 }),
-                // roll forward
-                getAutonomousCommand(rollForward2Meters),
-                // intake note
+                // put intake down
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
+                // run the intake
                 new InstantCommand(() -> intake.intake()),
-                new WaitCommand(1),
+                // roll forward
+                getAutonomousCommand(rollForwardMeters),
                 new InstantCommand(() -> {
                     intake.stop();
                 }),
                 // roll backward
-                getAutonomousCommand(rollBackward2Meters),
+                getAutonomousCommand(rollBackwardMeters),
                 // shoot
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
                 new InstantCommand(() -> shooter.shoot()),
