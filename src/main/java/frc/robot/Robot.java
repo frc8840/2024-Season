@@ -93,8 +93,6 @@ public class Robot extends TimedRobot {
 
   private Command getCommand(String s) {
     switch (s) {
-      case "COMPLEX":
-        return container.getA2BlueCommand();
       case "SHOOT_AND_LEFT":
         return container.shootAndDriveCommand(SimpleDirection.diagonalLeft);
       case "SHOOT_AND_RIGHT":
@@ -114,6 +112,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    container.shooter.stop();
+    container.intake.stop();
   }
 
   /** This function is called periodically during operator control. */

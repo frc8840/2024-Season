@@ -27,10 +27,10 @@ import frc.team_8840_lib.info.console.Logger;
 public class RobotContainer {
     private static RobotContainer instance;
     private Arm arm;
-    private Climber climber;
+    public Climber climber;
     private NewSwerve swerve;
-    private PickUpNote intake;
-    private ArmShooter shooter;
+    public PickUpNote intake;
+    public ArmShooter shooter;
 
     // controllers
     DriverControl driverControl;
@@ -75,61 +75,6 @@ public class RobotContainer {
 
     }
 
-    public Command getA2BlueCommand() {
-        trajectoryConfig.setReversed(true);
-        Trajectory t1 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(Math.PI / 3)),
-                List.of(
-                // new Translation2d(-0.254, 1.524)
-                ),
-
-                new Pose2d(-0.254, 1.524, new Rotation2d(0)),
-
-                trajectoryConfig);
-        trajectoryConfig.setReversed(false);
-        Trajectory t2 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(-0.254, 1.524, new Rotation2d(0)),
-                List.of(
-                // new Translation2d ()
-                ),
-                new Pose2d(0, 0, new Rotation2d(Math.PI / 3)),
-                trajectoryConfig);
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
-                new InstantCommand(() -> shooter.shoot()),
-                new WaitCommand(2),
-                new InstantCommand(() -> intake.intake()),
-                new WaitCommand(1),
-                new InstantCommand(() -> {
-                    intake.stop();
-                    shooter.stop();
-                }),
-                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
-                new WaitCommand(0.5),
-                getAutonomousCommand(t1),
-                new InstantCommand(() -> swerve.stopModules()),
-                new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
-                new WaitCommand(1),
-                new InstantCommand(() -> intake.intake()),
-                new WaitCommand(0.5),
-                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
-                new WaitCommand(0.5),
-                getAutonomousCommand(t2),
-                new InstantCommand(() -> swerve.stopModules()),
-                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
-                new WaitCommand(0.5),
-                new InstantCommand(() -> shooter.shoot()),
-                new WaitCommand(2),
-                new InstantCommand(() -> intake.intake()),
-                new WaitCommand(1),
-                new InstantCommand(() -> {
-                    intake.stop();
-                    shooter.stop();
-                }));
-
-    }
-
     public Command shootAndDriveCommand(SimpleDirection direction) {
         // get the pose for the direction
         Pose2d pose = new Pose2d(-0.8636, 0, new Rotation2d(0)); // straight
@@ -166,7 +111,7 @@ public class RobotContainer {
 
     public Command shootAndDriveAndShootAgainCommand(SimpleDirection direction) {
         // get the pose for the direction
-        Pose2d pose = new Pose2d(-0.254, 1.524, new Rotation2d(0)); // straight
+        Pose2d pose = new Pose2d(-1.1136, 0, new Rotation2d(0)); // straight
         if (direction == SimpleDirection.diagonalLeft) {
             pose = new Pose2d(-1.4, 1.4, new Rotation2d(0));
         } else if (direction == SimpleDirection.diagonalRight) {
@@ -185,7 +130,8 @@ public class RobotContainer {
         Trajectory rollBackwardMeters = TrajectoryGenerator.generateTrajectory(
                 pose,
                 List.of(),
-                new Pose2d(0, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
+                new Pose2d(-0.25, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go
+                                                         // bakcwards
                 trajectoryConfig);
         return new SequentialCommandGroup(
                 // reset odometry
@@ -197,20 +143,23 @@ public class RobotContainer {
                 new InstantCommand(() -> intake.intake()),
                 new WaitCommand(1),
                 new InstantCommand(() -> {
-                    intake.stop();
+                    // intake.stop();
                     shooter.stop();
                 }),
                 // put intake down
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.WRIST)),
                 // run the intake
-                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+
                 // roll forward
                 getAutonomousCommand(rollForwardMeters),
+
+                // roll backward
+                getAutonomousCommand(rollBackwardMeters),
+                new WaitCommand(0.5),
                 new InstantCommand(() -> {
                     intake.stop();
                 }),
-                // roll backward
-                getAutonomousCommand(rollBackwardMeters),
                 // shoot
                 new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
                 new InstantCommand(() -> shooter.shoot()),

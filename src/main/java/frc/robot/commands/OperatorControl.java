@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.Settings;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -43,6 +45,10 @@ public class OperatorControl extends Command {
     @Override
     public void execute() {
 
+        // if (intake.getTimeRunning() > 500 && intake.getAmperage() > 20) {
+        // intake.stop();
+        // }
+
         if (ps4controller.getTriangleButton()) {
             arm.setArmPosition(ArmPosition.AMPSHOOTING);
         }
@@ -74,6 +80,19 @@ public class OperatorControl extends Command {
         } else if (!intake.inComplexAction) {
             // not in the middle of complex action
             intake.stop();
+        }
+
+        if (ps4controller.getPSButtonPressed()) {
+            shooter.inShooterComplexAction = true;
+            Command c = new SequentialCommandGroup(new InstantCommand(() -> shooter.shoot()), // run the shooter
+                    new WaitCommand(0.5),
+                    new InstantCommand(() -> intake.intake()), // run the intake
+                    new WaitCommand(0.5),
+                    new InstantCommand(() -> {
+                        shooter.stop();
+                        intake.stop();
+                    }));
+            c.schedule();
         }
 
         if (ps4controller.getShareButtonPressed()) {

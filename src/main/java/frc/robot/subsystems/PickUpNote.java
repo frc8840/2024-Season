@@ -12,6 +12,7 @@ public class PickUpNote extends SubsystemBase {
 
     private CANSparkMax iMotor;
     public boolean inComplexAction = false;
+    // public long motorStartTime = -1; // not running
 
     public PickUpNote() {
 
@@ -34,6 +35,9 @@ public class PickUpNote extends SubsystemBase {
     public void intake() {
         iMotor.set(Settings.PICKUP_INTAKE_SPEED);
         Logger.Log("Intake Motor Amperage: " + iMotor.getOutputCurrent());
+        // if (motorStartTime < 0) {
+        // motorStartTime = System.currentTimeMillis();
+        // }
     }
 
     public void outtake() {
@@ -44,6 +48,17 @@ public class PickUpNote extends SubsystemBase {
     public void stop() {
         iMotor.set(0);
         inComplexAction = false;
+        // motorStartTime = -1; // stopped
     }
+
+    public double getAmperage() {
+        return iMotor.getOutputCurrent();
+    }
+
+    // public long getTimeRunning() {
+    // if (motorStartTime < 0)
+    // return 0;
+    // return System.currentTimeMillis() - motorStartTime;
+    // }
 
 }

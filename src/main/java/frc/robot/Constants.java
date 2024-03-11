@@ -19,7 +19,7 @@ public final class Constants {
         }
 
         public static final class Swerve {
-                public static final double stickDeadband = 0.1;
+                public static final double stickDeadband = 0.15;
 
                 public static final int pigeonID = 42;
                 public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -52,13 +52,13 @@ public final class Constants {
 
                 /* Swerve Current Limiting */
                 public static final int angleContinuousCurrentLimit = 20;
-                public static final int driveContinuousCurrentLimit = 80;
+                public static final int driveContinuousCurrentLimit = 50;
 
                 /* Angle Motor PID Values */
                 public static final double angleKP = 0.01;
                 public static final double angleKI = 0.0;
                 public static final double angleKD = 0.0;
-                public static final double angleKFF = 0.0;
+                public static final double angleKFF = 0.00;
 
                 /* Drive Motor PID Values */
                 public static final double driveKP = 0.1;
@@ -110,7 +110,7 @@ public final class Constants {
         }
 
         public static final class AutoConstants {
-                public static final double kMaxSpeedMetersPerSecond = 1;
+                public static final double kMaxSpeedMetersPerSecond = 0.5;
                 public static final double kMaxAccelerationMetersPerSecondSquared = 2;
                 public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
                 public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;

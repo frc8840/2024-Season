@@ -12,6 +12,8 @@ public class ArmShooter extends SubsystemBase {
     public CANSparkMax leftMotor;
     public CANSparkMax rightMotor;
 
+    public boolean inShooterComplexAction = false;
+
     public ArmShooter() {
 
         leftMotor = new CANSparkMax(Settings.SHOOTER_MOTOR_ID, MotorType.kBrushless);
@@ -47,6 +49,7 @@ public class ArmShooter extends SubsystemBase {
     public void stop() {
         leftMotor.set(0);
         rightMotor.set(0);
+        inShooterComplexAction = false;
     }
 
     public void gethard() {
