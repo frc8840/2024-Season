@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.config.CTREConfigs;
-import frc.robot.RobotContainer.SimpleDirection;
 import frc.team_8840_lib.info.console.Logger;
 
 /**
@@ -82,7 +81,7 @@ public class Robot extends TimedRobot {
     String m_autoSelected = m_chooser.getSelected();
     Logger.Log("We got selection: " + m_autoSelected);
 
-    Command autonomousCommand = getCommand(m_autoSelected);
+    Command autonomousCommand = container.getAutonomousCommand();
 
     // schedule the autonomous command - adds it to the scheduler
     if (autonomousCommand != null) {
@@ -91,18 +90,18 @@ public class Robot extends TimedRobot {
 
   }
 
-  private Command getCommand(String s) {
-    switch (s) {
-      case "SHOOT_AND_LEFT":
-        return container.shootAndDriveCommand(SimpleDirection.diagonalLeft);
-      case "SHOOT_AND_RIGHT":
-        return container.shootAndDriveCommand(SimpleDirection.diagonalRight);
-      case "SHOOT_TWICE":
-        return container.shootAndDriveAndShootAgainCommand(SimpleDirection.straight);
-      default:
-        return container.shootAndDriveCommand(SimpleDirection.straight);
-    }
-  }
+  // private Command getCommand(String s) {
+  // switch (s) {
+  // case "SHOOT_AND_LEFT":
+  // return container.shootAndDriveCommand(SimpleDirection.diagonalLeft);
+  // case "SHOOT_AND_RIGHT":
+  // return container.shootAndDriveCommand(SimpleDirection.diagonalRight);
+  // case "SHOOT_TWICE":
+  // return container.shootAndDriveAndShootAgainCommand(SimpleDirection.straight);
+  // default:
+  // return container.shootAndDriveCommand(SimpleDirection.straight);
+  // }
+  // }
 
   /** This function is called periodically during autonomous. */
   @Override
