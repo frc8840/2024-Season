@@ -16,7 +16,6 @@ import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.team_8840_lib.info.console.Logger;
 
 public class NewSwerveModule {
     public int moduleNumber;

@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.team_8840_lib.info.console.Logger;
 
 public class NewSwerve extends SubsystemBase {
 
@@ -27,15 +26,12 @@ public class NewSwerve extends SubsystemBase {
 
     private SwerveDriveOdometry odometer;
     private NewSwerveModule[] mSwerveMods;
-    private ChassisSpeeds chassisSpeeds;
 
     private Field2d field;
 
     public NewSwerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         zeroGyro();
-
-        chassisSpeeds = new ChassisSpeeds();
 
         SwerveModulePosition[] startPositions = new SwerveModulePosition[] {
                 new SwerveModulePosition(),
@@ -92,7 +88,7 @@ public class NewSwerve extends SubsystemBase {
             Translation2d translation, double rotation, boolean fieldRelative) {
 
         // first, we compute our desired chassis speeds
-        chassisSpeeds = fieldRelative
+        ChassisSpeeds chassisSpeeds = fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(), translation.getY(), rotation, getYaw())
                 : new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
@@ -100,7 +96,7 @@ public class NewSwerve extends SubsystemBase {
     }
 
     public void drive(ChassisSpeeds speeds) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(swerveModuleStates);
     }
 
@@ -178,11 +174,17 @@ public class NewSwerve extends SubsystemBase {
         }
     }
 
-    // TODO: this is currently returning our "desired" chassis speeds
-    // but not the actual ones as measured by encoders
-    // maybe we could ask all the swerve module motor encoders about our speed and
-    // direction instead?
+    // constructs current estimate of chassis speeds from module encoders
     public ChassisSpeeds getChassisSpeeds() {
+        var frontLeftState = mSwerveMods[0].getState();
+        var frontRightState = mSwerveMods[1].getState();
+        var backLeftState = mSwerveMods[2].getState();
+        var backRightState = mSwerveMods[3].getState();
+
+        // Convert to chassis speeds
+        ChassisSpeeds chassisSpeeds = Constants.Swerve.swerveKinematics.toChassisSpeeds(
+                frontLeftState, frontRightState, backLeftState, backRightState);
+
         return chassisSpeeds;
     }
 }
