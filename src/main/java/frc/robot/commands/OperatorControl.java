@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -27,6 +28,9 @@ public class OperatorControl extends Command {
     private ArmShooter shooter;
     private Arm arm;
 
+    public boolean isAbletoShoot = false;
+    long shooterStarted = -1;
+
     private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.WRIST, ArmPosition.AMPSHOOTING,
             ArmPosition.SPEAKERSHOOTING };
 
@@ -48,6 +52,12 @@ public class OperatorControl extends Command {
         // if (intake.getTimeRunning() > 500 && intake.getAmperage() > 20) {
         // intake.stop();
         // }
+        SmartDashboard.putBoolean(getName(), isAbletoShoot);
+        long now = System.currentTimeMillis();
+        if (shooterStarted + 1000 > now) {
+            // it has been 500ms since shooter started and intake hasn't started yet
+            isAbletoShoot = true;
+        }
 
         if (ps4controller.getTriangleButton()) {
             arm.setArmPosition(ArmPosition.AMPSHOOTING);
@@ -119,6 +129,10 @@ public class OperatorControl extends Command {
                         intake.stop();
                     })); // stop them both
             c.schedule(); // make it happen!
+                }
+        if (ps4controller.getPOV() == 180) {
+            shooter.inShooterComplexAction = true;
+            shooter.shoot();
         }
     }
 
