@@ -1,32 +1,15 @@
 package frc.robot;
 
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.PickUpNote;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Arm.ArmPosition;
 import frc.robot.subsystems.ArmShooter;
 import frc.team_8840_lib.info.console.Logger;
 
@@ -85,11 +68,13 @@ public class RobotContainer {
 
         // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
+        // isAbletoShoot =
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
     }
 
     // public Command shootAndDriveCommand(SimpleDirection direction) {
@@ -223,6 +208,7 @@ public class RobotContainer {
     // diagonalLeft,
     // }
 
+    // it gets the selection from smart dashboard
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }

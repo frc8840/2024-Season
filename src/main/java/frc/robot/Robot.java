@@ -5,12 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.config.CTREConfigs;
-import frc.team_8840_lib.info.console.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +21,6 @@ import frc.team_8840_lib.info.console.Logger;
  */
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   RobotContainer container;
 
@@ -34,14 +31,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("DEFAULT", "DEFAULT");
-    m_chooser.addOption("SHOOT_AND_STRAIGHT", "SHOOT_AND_STRAIGHT");
-    m_chooser.addOption("SHOOT_AND_LEFT", "SHOOT_AND_LEFT");
-    m_chooser.addOption("SHOOT_AND_RIGHT", "SHOOT_AND_RIGHT");
-    m_chooser.addOption("SHOOT_TWICE", "SHOOT_TWICE");
-    SmartDashboard.putData("Autonomous selection", m_chooser);
     ctreConfigs = new CTREConfigs();
     container = new RobotContainer();
+
   }
 
   /**
@@ -78,8 +70,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    String m_autoSelected = m_chooser.getSelected();
-    Logger.Log("We got selection: " + m_autoSelected);
 
     Command autonomousCommand = container.getAutonomousCommand();
 

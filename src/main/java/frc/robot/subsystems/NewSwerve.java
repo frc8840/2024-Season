@@ -157,10 +157,11 @@ public class NewSwerve extends SubsystemBase {
         odometer.update(getYaw(), getPositions());
         field.setRobotPose(getPose());
 
-        for (NewSwerveModule mod : mSwerveMods) {
-            SmartDashboard.putNumber(
-                    "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoderAngle().getDegrees());
-        }
+        // for (NewSwerveModule mod : mSwerveMods) {
+        // SmartDashboard.putNumber(
+        // "Mod " + mod.moduleNumber + " Cancoder",
+        // mod.getCanCoderAngle().getDegrees());
+        // }
         // tell dashboard where the robot thinks it is
         SmartDashboard.putNumber(
                 "Robot heading:", gyro.getAngle());
