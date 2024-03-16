@@ -19,7 +19,6 @@ public final class Constants {
         }
 
         public static final class Swerve {
-                public static final double stickDeadband = 0.15;
 
                 public static final int pigeonID = 42;
                 public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -78,7 +77,7 @@ public final class Constants {
 
                 /* Swerve Profiling Values */
                 public static final double maxSpeed = 2.0; // meters per second
-                public static final double maxAngularVelocity = 11.5;
+                public static final double maxAngularVelocity = 5.0;
 
                 /* Neutral Modes */
                 public static final CANSparkMax.IdleMode angleNeutralMode = CANSparkMax.IdleMode.kBrake;
@@ -110,17 +109,20 @@ public final class Constants {
         }
 
         public static final class AutoConstants {
-                public static final double kMaxSpeedMetersPerSecond = 0.5;
-                public static final double kMaxAccelerationMetersPerSecondSquared = 2;
-                public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-                public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
+                // public static final double kMaxSpeedMetersPerSecond = 0.5;
+                // public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+                // public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+                // public static final double kMaxAngularAccelerationRadiansPerSecondSquared =
+                // Math.PI;
 
-                public static final double kPXController = 1;
-                public static final double kPYController = 1;
-                public static final double kPThetaController = 1;
+                // public static final double kPXController = 1;
+                // public static final double kPYController = 1;
+                // public static final double kPThetaController = 1;
 
-                // // Constraint for the motion profilied robot angle controller
-                public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-                                kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
+                // // // Constraint for the motion profilied robot angle controller
+                // public static final TrapezoidProfile.Constraints kThetaControllerConstraints
+                // = new TrapezoidProfile.Constraints(
+                // kMaxAngularSpeedRadiansPerSecond,
+                // kMaxAngularAccelerationRadiansPerSecondSquared);
         }
 }

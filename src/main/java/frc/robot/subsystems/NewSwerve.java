@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.team_8840_lib.info.console.Logger;
 
 public class NewSwerve extends SubsystemBase {
 
@@ -54,6 +55,7 @@ public class NewSwerve extends SubsystemBase {
         // Logger.Log("mSwerveMods.length=" + mSwerveMods.length);
 
         // starting to use pathplanner
+        Logger.Log("about to configureHolonomic");
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -61,10 +63,10 @@ public class NewSwerve extends SubsystemBase {
                 this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                                  // Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new PIDConstants(0.01, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(0.01, 0.0, 0.0), // Rotation PID constants
+                        0.5, // Max module speed, in m/s
+                        0.6, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -81,6 +83,7 @@ public class NewSwerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
+        Logger.Log("completed configureHolonomic");
     }
 
     // translation and rotation are the desired behavior of the robot at this moment

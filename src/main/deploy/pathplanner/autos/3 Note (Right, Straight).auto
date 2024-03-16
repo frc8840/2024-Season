@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right"
@@ -26,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake"
+            "name": "Stop Intake"
           }
         },
         {
@@ -42,6 +48,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Straight"
@@ -50,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake"
+            "name": "Stop Intake"
           }
         },
         {
