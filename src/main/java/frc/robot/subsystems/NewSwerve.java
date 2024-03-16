@@ -98,15 +98,16 @@ public class NewSwerve extends SubsystemBase {
         drive(chassisSpeeds);
     }
 
+    // used by tele
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
+        // do we need the below?
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
         setModuleStates(swerveModuleStates);
     }
 
-    /* Used by SwerveControllerCommand in Auto */
+    // used by auto
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-
         for (NewSwerveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber]);
         }
