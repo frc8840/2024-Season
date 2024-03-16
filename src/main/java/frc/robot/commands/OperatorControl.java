@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -24,7 +23,7 @@ public class OperatorControl extends Command {
 
     long shooterStarted = -1;
 
-    private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.WRIST, ArmPosition.AMPSHOOTING,
+    private final Arm.ArmPosition[] heightOrder = new ArmPosition[] { ArmPosition.INTAKE, ArmPosition.AMPSHOOTING,
             ArmPosition.SPEAKERSHOOTING };
 
     // Make sure the roller imported is the one from subsystems! Not from settings.
@@ -51,7 +50,7 @@ public class OperatorControl extends Command {
         }
 
         if (ps4controller.getL1ButtonPressed()) {
-            arm.setArmPosition(ArmPosition.WRIST);
+            arm.setArmPosition(ArmPosition.INTAKE);
         }
 
         if (ps4controller.getR1ButtonPressed()) {
@@ -117,7 +116,6 @@ public class OperatorControl extends Command {
                     })); // stop them both
             c.schedule(); // make it happen!
         }
-
         if (ps4controller.getPOV() == 180) {
             shooter.inShooterComplexAction = true;
             shooter.shoot();
