@@ -117,9 +117,15 @@ public class OperatorControl extends Command {
                     })); // stop them both
             c.schedule(); // make it happen!
         }
+
         if (ps4controller.getPOV() == 180) {
             shooter.inShooterComplexAction = true;
             shooter.shoot();
+        }
+
+        if (ps4controller.getPOV() == 0) {
+            shooter.inShooterComplexAction = false;
+            shooter.stop();
         }
     }
 

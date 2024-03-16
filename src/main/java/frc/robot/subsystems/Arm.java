@@ -137,7 +137,8 @@ public class Arm extends SubsystemBase {
         return position;
     }
 
-    public void reportToNetworkTables() {
+    @Override
+    public void periodic() {
         SmartDashboard.putNumber("Arm/Shoulder Encoder", shoulderEncoder.getPosition());
         SmartDashboard.putNumber("Arm/Elbow Encoder", elbowEncoder.getPosition());
         SmartDashboard.putNumber("Arm/Wrist Encoder", wristEncoder.getPosition());
