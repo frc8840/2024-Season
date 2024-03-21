@@ -143,12 +143,9 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPosition {
         REST(0, 0),
-        SHOULDER(20, 0),
-        ELBOW(0, 0),
         INTAKE(0, 117),
         AMPSHOOTING(0, 120),
         SPEAKERSHOOTING(0, 110),
-        TRAPSHOOTING(0, 0),
         INTAKEDEMO(0, 117);
 
         public final double shoulderAngle;
