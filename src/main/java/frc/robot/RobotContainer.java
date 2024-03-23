@@ -1,18 +1,30 @@
 package frc.robot;
 
+import java.util.List;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.PickUpNote;
 import frc.robot.subsystems.Arm.ArmPosition;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ArmShooter;
 import frc.team_8840_lib.info.console.Logger;
@@ -24,6 +36,7 @@ public class RobotContainer {
     private NewSwerve swerve;
     public PickUpNote intake;
     public ArmShooter shooter;
+    public Lights lights;
 
     // for the choosing stage of pathplanner auto
     private final SendableChooser<Command> autoChooser;
@@ -31,6 +44,8 @@ public class RobotContainer {
     // controllers
     DriverControl driverControl;
     OperatorControl operatorControl;
+
+    TrajectoryConfig trajectoryConfig;
 
     // for autonomous
     // TrajectoryConfig trajectoryConfig;
@@ -48,6 +63,7 @@ public class RobotContainer {
         climber = new Climber();
         intake = new PickUpNote();
         shooter = new ArmShooter();
+        lights = new Lights();
 
         Logger.Log("finished constructing subsystems, going to sleep");
         try {
@@ -74,6 +90,50 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
+        trajectoryConfig = new TrajectoryConfig(Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics);
+
+    }
+
+    public Command shootAndDriveForwardCommand(SimpleDirection direction) {
+        // get the pose for the direction
+        Pose2d pose = new Pose2d(-2, 0, new Rotation2d(0)); // straight
+        if (direction == SimpleDirection.diagonalLeft) {
+            pose = new Pose2d(-1.4, 1.4, new Rotation2d(0));
+        } else if (direction == SimpleDirection.diagonalRight) {
+            pose = new Pose2d(-1.4, -1.4, new Rotation2d(0));
+        }
+
+        intake.inComplexAction = true;
+        // before we make our trajectory, let it know that we should go in reverse
+        Trajectory rollForward2Meters = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(),
+                new Pose2d(-2, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
+                trajectoryConfig);
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.SPEAKERSHOOTING)),
+                new InstantCommand(() -> shooter.shoot()),
+                new WaitCommand(2),
+                new InstantCommand(() -> intake.intake()),
+                new WaitCommand(1),
+                new InstantCommand(() -> {
+                    intake.stop();
+                    shooter.stop();
+                }),
+                new InstantCommand(() -> arm.setArmPosition(ArmPosition.REST)),
+                new WaitCommand(2),
+                getAutonomousCommand(rollForward2Meters),
+                new InstantCommand(() -> swerve.stopModules()));
+
+    }
+
+    public enum SimpleDirection {
+        straight,
+        diagonalRight,
+        diagonalLeft,
     }
 
     public Command getStartIntakeCommand() {
@@ -98,7 +158,7 @@ public class RobotContainer {
     }
 
     // it gets the selection from smart dashboard
-    public Command getAutonomousCommand() {
+    public Command getAutonomousCommand(Trajectory rollForward2Meters) {
         return autoChooser.getSelected();
     }
 

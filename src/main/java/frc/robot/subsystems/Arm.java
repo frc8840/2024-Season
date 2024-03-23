@@ -61,7 +61,8 @@ public class Arm extends SubsystemBase {
         wristMotor.enableVoltageCompensation(12);
 
         shoulderEncoder.setPositionConversionFactor((1 / Settings.SHOULDER_GEAR_RATIO) * 360);
-        // elbowEncoder.setPositionConversionFactor((1 / Settings.ELBOW_GEAR_RATIO) * 360);
+        // elbowEncoder.setPositionConversionFactor((1 / Settings.ELBOW_GEAR_RATIO) *
+        // 360);
         wristEncoder.setPositionConversionFactor((1 / Settings.WRIST_GEAR_RATIO) * 360);
 
         shoulderPID = shoulderMotor.getPIDController();
@@ -86,7 +87,8 @@ public class Arm extends SubsystemBase {
         wristPID.setIZone(Settings.WRIST_PID.kIZone);
         wristPID.setFF(Settings.WRIST_PID.kF);
 
-        // shoulderPID.setOutputRange(-Settings.MAX_SHOULDER_SPEED, Settings.MAX_SHOULDER_SPEED);
+        // shoulderPID.setOutputRange(-Settings.MAX_SHOULDER_SPEED,
+        // Settings.MAX_SHOULDER_SPEED);
         // elbowPID.setOutputRange(-Settings.MAX_ELBOW_SPEED, Settings.MAX_ELBOW_SPEED);
         // wristPID.setOutputRange(-Settings.MAX_WRIST_SPEED, Settings.MAX_WRIST_SPEED);
 
@@ -105,9 +107,9 @@ public class Arm extends SubsystemBase {
                 0);
 
         // elbowPID.setReference(
-        //         position.elbowAngle,
-        //         ControlType.kPosition,
-        //         0);
+        // position.elbowAngle,
+        // ControlType.kPosition,
+        // 0);
 
         wristPID.setReference(
                 position.wristAngle,
@@ -144,7 +146,7 @@ public class Arm extends SubsystemBase {
     public enum ArmPosition {
         REST(0, 0),
         INTAKE(0, 117),
-        AMPSHOOTING(0, 120),
+        AMPSHOOTING(90, 90),
         SPEAKERSHOOTING(0, 110),
         INTAKEDEMO(0, 117);
 

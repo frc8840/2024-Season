@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
+import frc.robot.subsystems.Lights;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,8 @@ public class ArmShooter extends SubsystemBase {
 
     public CANSparkMax leftMotor;
     public CANSparkMax rightMotor;
+
+    public Lights lights;
 
     public RelativeEncoder leftEncoder;
     public RelativeEncoder rightEncoder;
@@ -55,6 +58,7 @@ public class ArmShooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter right ", rightEncoder.getVelocity());
         boolean isReady = (Math.abs(leftEncoder.getVelocity()) > 4300 && Math.abs(rightEncoder.getVelocity()) > 4300);
         SmartDashboard.putBoolean("Shooter Ready", isReady);
+
     }
 
     public void shoot() {

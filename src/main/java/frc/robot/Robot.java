@@ -7,10 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.config.CTREConfigs;
+import frc.robot.RobotContainer.SimpleDirection;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +25,7 @@ import frc.lib.config.CTREConfigs;
  */
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   RobotContainer container;
 
@@ -35,26 +38,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
     container = new RobotContainer();
+    m_chooser.setDefaultOption("DEFAULT", "DEFAULT");
+    SmartDashboard.putData("Autonomous selection", m_chooser);
     // PWM port 9
     // Must be a PWM header, not MXP or DIO
-    AddressableLED m_led = new AddressableLED(9);
-
-    // Reuse buffer
-    // Default to a length of 60, start empty output
-    // Length is expensive to set, so only set it once, then just update data
-    AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(27);
-    m_led.setLength(m_ledBuffer.getLength());
-
-    // Set the data
-    m_led.setData(m_ledBuffer);
-    m_led.start();
-
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for red
-      m_ledBuffer.setRGB(i, 255, 0, 0);
-   }
-   
-   m_led.setData(m_ledBuffer);
 
   }
 
@@ -93,7 +80,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    Command autonomousCommand = container.getAutonomousCommand();
+    String m_autoSelected = m_chooser.getSelected();
+    // Command autonomousCommand = container.getAutonomousCommand();
+    Command autonomousCommand = getCommand(m_autoSelected);
 
     // schedule the autonomous command - adds it to the scheduler
     if (autonomousCommand != null) {
@@ -102,18 +91,12 @@ public class Robot extends TimedRobot {
 
   }
 
-  // private Command getCommand(String s) {
-  // switch (s) {
-  // case "SHOOT_AND_LEFT":
-  // return container.shootAndDriveCommand(SimpleDirection.diagonalLeft);
-  // case "SHOOT_AND_RIGHT":
-  // return container.shootAndDriveCommand(SimpleDirection.diagonalRight);
-  // case "SHOOT_TWICE":
-  // return container.shootAndDriveAndShootAgainCommand(SimpleDirection.straight);
-  // default:
-  // return container.shootAndDriveCommand(SimpleDirection.straight);
-  // }
-  // }
+  private Command getCommand(String s) {
+    switch (s) {
+      default:
+        return container.shootAndDriveForwardCommand(SimpleDirection.straight);
+    }
+  }
 
   /** This function is called periodically during autonomous. */
   @Override

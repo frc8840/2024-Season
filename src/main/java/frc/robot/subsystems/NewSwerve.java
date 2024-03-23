@@ -139,7 +139,7 @@ public class NewSwerve extends SubsystemBase {
 
     public void zeroGyro() {
         // Logger.Log("zeroGyro called");
-        gyro.setYaw(0);
+        gyro.setYaw(180);
     }
 
     public Rotation2d getYaw() {
