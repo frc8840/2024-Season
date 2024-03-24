@@ -25,7 +25,7 @@ public class Settings {
 
     public static final PIDStruct SHOULDER_PID = new PIDStruct(0.10, 0.0, 40.0);
     // public static final PIDStruct ELBOW_PID = new PIDStruct(0.10, 0.0, 40.0);
-    public static final PIDStruct WRIST_PID = new PIDStruct(0.10, 0.0, 40.0);
+    public static final PIDStruct WRIST_PID = new PIDStruct(0.10, 0.0, 50.0);
 
     public static final PIDStruct FRONTLEFT_PID = new PIDStruct(0.10, 0.0, 40.0);
     public static final PIDStruct FRONTRIGHT_PID = new PIDStruct(0.10, 0.0, 40.0);
@@ -40,7 +40,7 @@ public class Settings {
 
     // INTAKE SETTINGS
     public static final int INTAKE_MOTOR_ID = 50;
-    public static final double PICKUP_OUTTAKE_SPEED = -0.75;
+    public static final double PICKUP_OUTTAKE_SPEED = -0.2;
     public static final double PICKUP_INTAKE_SPEED = 0.25;
     // SHOOTER SETTINGS
     public static final int SHOOTER_MOTOR_ID = 51;

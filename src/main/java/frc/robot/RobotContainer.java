@@ -5,6 +5,8 @@ import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriverControl;
 import frc.robot.commands.OperatorControl;
@@ -74,7 +77,7 @@ public class RobotContainer {
         Logger.Log("finished sleeping");
 
         // now make the controllers
-        driverControl = new DriverControl(swerve, arm);
+        driverControl = new DriverControl(swerve, arm, lights);
         swerve.setDefaultCommand(driverControl);
 
         operatorControl = new OperatorControl(arm, climber, intake, shooter);
@@ -98,11 +101,11 @@ public class RobotContainer {
 
     public Command shootAndDriveForwardCommand(SimpleDirection direction) {
         // get the pose for the direction
-        Pose2d pose = new Pose2d(-2, 0, new Rotation2d(0)); // straight
+        Pose2d pose = new Pose2d(3, 0, new Rotation2d(0)); // straight
         if (direction == SimpleDirection.diagonalLeft) {
-            pose = new Pose2d(-1.4, 1.4, new Rotation2d(0));
+            pose = new Pose2d(1.4, 1.4, new Rotation2d(0));
         } else if (direction == SimpleDirection.diagonalRight) {
-            pose = new Pose2d(-1.4, -1.4, new Rotation2d(0));
+            pose = new Pose2d(1.4, 1.4, new Rotation2d(0));
         }
 
         intake.inComplexAction = true;
@@ -110,7 +113,7 @@ public class RobotContainer {
         Trajectory rollForward2Meters = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 List.of(),
-                new Pose2d(-2, 0, new Rotation2d(0)), // the trajectory generator seems to think we have to go bakcwards
+                pose,
                 trajectoryConfig);
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
@@ -157,9 +160,23 @@ public class RobotContainer {
         });
     }
 
-    // it gets the selection from smart dashboard
-    public Command getAutonomousCommand(Trajectory rollForward2Meters) {
-        return autoChooser.getSelected();
+    public SwerveControllerCommand getAutonomousCommand(Trajectory trajectory) {
+        // create the PID controllers for feedback
+        PIDController xController = new PIDController(0.2, 0, 0);
+        PIDController yController = new PIDController(0.2, 0, 0);
+        ProfiledPIDController thetaController = new ProfiledPIDController(0.2, 0, 0,
+                Constants.AutoConstants.kThetaControllerConstraints);
+        ;
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        return new SwerveControllerCommand(
+                trajectory,
+                swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                xController,
+                yController,
+                thetaController,
+                swerve::setModuleStates,
+                swerve);
     }
 
 }

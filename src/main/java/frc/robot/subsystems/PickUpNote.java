@@ -32,13 +32,13 @@ public class PickUpNote extends SubsystemBase {
         iMotor.burnFlash();
 
     }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Amperage", iMotor.getOutputCurrent());
         boolean noteIn = (Math.abs(iMotor.getOutputCurrent()) > 100);
         SmartDashboard.putBoolean("Intake Successful", noteIn);
     }
-    
 
     public void intake() {
         iMotor.set(Settings.PICKUP_INTAKE_SPEED);

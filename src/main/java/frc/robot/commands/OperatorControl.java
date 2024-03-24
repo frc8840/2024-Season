@@ -82,17 +82,9 @@ public class OperatorControl extends Command {
             intake.stop();
         }
 
-        if (ps4controller.getPSButtonPressed()) {
-            shooter.inShooterComplexAction = true;
-            Command c = new SequentialCommandGroup(new InstantCommand(() -> shooter.shoot()), // run the shooter
-                    new InstantCommand(() -> intake.intake()), // run the intake
-                    new WaitCommand(0.5),
-                    new InstantCommand(() -> {
-                        shooter.stop();
-                        intake.stop();
-                    }));
-            c.schedule();
-        }
+        // if (ps4controller.getPSButtonPressed()) {
+        // arm.wristEncoder.setPosition(0);
+        // }
 
         if (ps4controller.getShareButtonPressed()) {
             arm.relax();
@@ -120,24 +112,18 @@ public class OperatorControl extends Command {
             c.schedule(); // make it happen!
         }
 
-        // if (ps4controller.getPOV() == 0) {
-        // shooter.inShooterComplexAction = true;
-        // Command s = new SequentialCommandGroup(
-        // new InstantCommand(() -> shooter.shoot()),
-        // new WaitCommand(2),
-        // new InstantCommand(() -> lights.turnGreen()));
-        // s.schedule();
-        // if (ps4controller.getR2Button()) {
-        // lights.turnRed();
-        // }
-        // }
-
-        // if (ps4controller.getPOV() == 180) {
-        // shooter.inShooterComplexAction = false;
-
-        // shooter.stop();
-        // lights.turnRed();
-        // }
+        if (ps4controller.getPSButtonPressed()) {
+            intake.inComplexAction = true;
+            Command c = new SequentialCommandGroup(
+                    new InstantCommand(() -> intake.intake()),
+                    new InstantCommand(() -> shooter.shoot()),
+                    new WaitCommand(0.5),
+                    new InstantCommand(() -> {
+                        intake.stop();
+                        shooter.stop();
+                    }));
+            c.schedule();
+        }
     }
 
 }

@@ -17,7 +17,7 @@ public class Arm extends SubsystemBase {
     private CANSparkMax wristMotor;
     private RelativeEncoder shoulderEncoder;
     // private RelativeEncoder elbowEncoder;
-    private RelativeEncoder wristEncoder;
+    public RelativeEncoder wristEncoder;
     private SparkPIDController shoulderPID;
     // private SparkPIDController elbowPID;
     private SparkPIDController wristPID;
