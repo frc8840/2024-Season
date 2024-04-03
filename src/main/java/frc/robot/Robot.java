@@ -38,6 +38,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
     container = new RobotContainer();
+    m_chooser.addOption("SHOOT_AND_LEFT", "SHOOT_AND_LEFT");
+    m_chooser.addOption("SHOOT_AND_RIGHT", "SHOOT_AND_RIGHT");
     m_chooser.setDefaultOption("DEFAULT", "DEFAULT");
     SmartDashboard.putData("Autonomous selection", m_chooser);
     // PWM port 9
@@ -80,18 +82,22 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    String m_autoSelected = m_chooser.getSelected();
-    Command autonomousCommand = getCommand(m_autoSelected);
+    // String m_autoSelected = m_chooser.getSelected();
+    // Command autonomousCommand = getCommand(m_autoSelected);
 
-    // schedule the autonomous command - adds it to the scheduler
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
+    // // schedule the autonomous command - adds it to the scheduler
+    // if (autonomousCommand != null) {
+    // // autonomousCommand.schedule();
+    // }
 
   }
 
   private Command getCommand(String s) {
     switch (s) {
+      case "SHOOT AND LEFT":
+        return container.shootAndDriveForwardCommand(SimpleDirection.diagonalLeft);
+      case "SHOOT AND RIGHT":
+        return container.shootAndDriveForwardCommand(SimpleDirection.diagonalRight);
       default:
         return container.shootAndDriveForwardCommand(SimpleDirection.straight);
     }

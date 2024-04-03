@@ -20,6 +20,24 @@ public class Climber extends SubsystemBase {
     private final SparkPIDController lController;
     private final SparkPIDController rController;
 
+    // constants
+
+    double kP = 0.1;
+    double kI = 0.0;
+    double kD = 5.0;
+    double kIz = 0.0;
+    double kFF = 0.0;
+    double kMaxOutput = 1;
+    double kMinOutput = -1;
+
+    double minVel = 0; // rpm // TODO is this correct?
+    double slowVel = 2500; // rpm
+    double fastVel = 5000; // rpm
+    double maxAcc = 1500;
+    double allowedErr = 0; // TODO is this correct?
+
+    int smartMotionSlot = 0;
+
     public Climber() {
 
         // Assumption of use of a NEO brushless motor
@@ -57,22 +75,6 @@ public class Climber extends SubsystemBase {
         lMotor.enableVoltageCompensation(12.0);
         rMotor.enableVoltageCompensation(12.0);
 
-        double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr;
-        kP = 0.1;
-        kI = 0.0;
-        kD = 5.0;
-        kIz = 0.0;
-        kFF = 0.0;
-        kMaxOutput = 1;
-        kMinOutput = -1;
-
-        minVel = 0; // rpm // TODO is this correct?
-        maxVel = 2500; // rpm
-        maxAcc = 1500;
-        allowedErr = 0; // TODO is this correct?
-
-        int smartMotionSlot = 0;
-
         // left
         lController.setP(kP);
         lController.setI(kI);
@@ -80,7 +82,7 @@ public class Climber extends SubsystemBase {
         lController.setIZone(kIz);
         lController.setFF(kFF);
         // lController.setOutputRange(kMinOutput, kMaxOutput);
-        lController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+        lController.setSmartMotionMaxVelocity(slowVel, smartMotionSlot);
         // lController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
         // lController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
         // lController.setSmartMotionAllowedClosedLoopError(allowedErr,
@@ -92,7 +94,7 @@ public class Climber extends SubsystemBase {
         rController.setIZone(kIz);
         rController.setFF(kFF);
         // rController.setOutputRange(kMinOutput, kMaxOutput);
-        rController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+        rController.setSmartMotionMaxVelocity(slowVel, smartMotionSlot);
         // rController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
         // rController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
         // rController.setSmartMotionAllowedClosedLoopError(allowedErr,
@@ -146,6 +148,19 @@ public class Climber extends SubsystemBase {
     public void drop() {
         lController.setReference(0, CANSparkMax.ControlType.kPosition);
         rController.setReference(0, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void fastDeploy() {
+        // increase the max velocity
+        lController.setSmartMotionMaxVelocity(fastVel, smartMotionSlot);
+        rController.setSmartMotionMaxVelocity(fastVel, smartMotionSlot);
+        // drop
+        lController.setReference(0, CANSparkMax.ControlType.kPosition);
+        rController.setReference(0, CANSparkMax.ControlType.kPosition);
+        // decrease the max velocity
+        lController.setSmartMotionMaxVelocity(slowVel, smartMotionSlot);
+        rController.setSmartMotionMaxVelocity(slowVel, smartMotionSlot);
+
     }
 
 }

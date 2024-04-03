@@ -101,7 +101,7 @@ public class RobotContainer {
 
     public Command shootAndDriveForwardCommand(SimpleDirection direction) {
         // get the pose for the direction
-        Pose2d pose = new Pose2d(3, 0, new Rotation2d(0)); // straight
+        Pose2d pose = new Pose2d(0, 0, new Rotation2d(0)); // straight
         if (direction == SimpleDirection.diagonalLeft) {
             pose = new Pose2d(1.4, 1.4, new Rotation2d(0));
         } else if (direction == SimpleDirection.diagonalRight) {
