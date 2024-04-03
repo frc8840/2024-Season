@@ -12,33 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Start Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Go to 2"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Return from 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         }
       ]
