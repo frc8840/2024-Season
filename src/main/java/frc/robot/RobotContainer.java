@@ -41,8 +41,10 @@ public class RobotContainer {
     public ArmShooter shooter;
     public Lights lights;
 
+    // the old chooser
+    private final SendableChooser<String> oldAutoChooser;
     // for the choosing stage of pathplanner auto
-    private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> newAutoChooser;
 
     // controllers
     DriverControl driverControl;
@@ -89,14 +91,38 @@ public class RobotContainer {
         NamedCommands.registerCommand("Stop Intake", getStopIntakeCommand());
         NamedCommands.registerCommand("Shoot", getShootCommand());
 
-        // Build an auto chooser and put it on the SmartDashboard
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        // The old autonomous chooser
+        oldAutoChooser = new SendableChooser<>();
+        oldAutoChooser.setDefaultOption("Straight", "Straight");
+        oldAutoChooser.setDefaultOption("Left", "Left");
+        oldAutoChooser.setDefaultOption("Right", "Right");
+        oldAutoChooser.setDefaultOption("PathPlanner", "PathPlanner");
+        SmartDashboard.putData("Old Auto Chooser", oldAutoChooser);
+
+        // The new autonomouse chooser
+        newAutoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("PathPlanner Auto Chooser", newAutoChooser);
 
         trajectoryConfig = new TrajectoryConfig(Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                 Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
+    }
+
+    public Command getAutoCommand() {
+        String oldAutoSelection = oldAutoChooser.getSelected();
+        if (oldAutoSelection == "PathPlanner") {
+            return newAutoChooser.getSelected();
+        }
+        // otherwise, use the old auto
+        switch (oldAutoSelection) {
+            case "Left":
+                return shootAndDriveForwardCommand(SimpleDirection.diagonalLeft);
+            case "Right":
+                return shootAndDriveForwardCommand(SimpleDirection.diagonalRight);
+            default:
+                return shootAndDriveForwardCommand(SimpleDirection.straight);
+        }
     }
 
     public Command shootAndDriveForwardCommand(SimpleDirection direction) {

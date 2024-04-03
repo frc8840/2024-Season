@@ -5,7 +5,9 @@
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Auto choices": "String Chooser",
       "/SmartDashboard/Autonomous selection": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Old Auto Chooser": "String Chooser",
+      "/SmartDashboard/PathPlanner Auto Chooser": "String Chooser"
     }
   },
   "NetworkTables": {
