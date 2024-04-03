@@ -50,8 +50,8 @@ public class NewSwerve extends SubsystemBase {
                 new NewSwerveModule(3, Constants.Swerve.BRconstants)
         };
 
-        field = new Field2d();
-        SmartDashboard.putData("Field", field);
+        // field = new Field2d();
+        // SmartDashboard.putData("Field", field);
         // Logger.Log("mSwerveMods.length=" + mSwerveMods.length);
 
         // starting to use pathplanner
@@ -60,7 +60,7 @@ public class NewSwerve extends SubsystemBase {
                 this::getPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                this::driveFromSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                                  // Constants class
                         new PIDConstants(0.01, 0.0, 0.0), // Translation PID constants
@@ -89,20 +89,20 @@ public class NewSwerve extends SubsystemBase {
     // translation and rotation are the desired behavior of the robot at this moment
     public void drive(
             Translation2d translation, double rotation, boolean fieldRelative) {
-
         // first, we compute our desired chassis speeds
         ChassisSpeeds chassisSpeeds = fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(), translation.getY(), rotation, getYaw())
                 : new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
-        drive(chassisSpeeds);
+        driveFromSpeeds(chassisSpeeds);
     }
 
     // used by tele
-    public void drive(ChassisSpeeds speeds) {
+    public void driveFromSpeeds(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         // do we need the below?
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+        // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates,
+        // Constants.Swerve.maxSpeed);
         setModuleStates(swerveModuleStates);
     }
 
